@@ -1,10 +1,24 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ControllerModule } from './service/controller/controller.module';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule, } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { EventModule } from './event/event.module';
 
+@Global()
 @Module({
-  imports: [ControllerModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
+    MongooseModule.forRoot(process.env.MONGO_URI),
+    AuthModule,
+    CloudinaryModule,
+    EventModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
