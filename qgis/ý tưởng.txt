@@ -1,0 +1,31 @@
+yêu cầu
+1. có user, admin => login 
+2. có db => cho admin thêm sửa xoá 
+3. có nhún bảng đồ
+4. có Frontend 
+
+
+=> làm 1 webapp, như 1 cái google map luông nhưng mà kèm theo mấy cái chức năng của chia sẽ vị trí trực tiếp(giống của dép lào với phờ bò)
+=> níu kịp thì thêm cái gì đó để lưu lại vị trí của thường ngày của user
+
+
+$ các chức năng cần có 
+login 
+kết bạn (cơ bản)
+tìm bạn (cơ bản)
+theo dõi vị trí trực tiếp(dùng socket)
+theo dõi trạng thái(online)
+setting vị trí (nhà riêng, trường học, user gớt suống xông ) cho từng user luông
+có gửi ting nhấng
+lịch sử di chuyển 
+thông báo khi có user(bạng pè) nào đó
+tạo 1 đỉm tụ họp 
+tìm đường đi đến 1 ví trí(đến chỗ pạng pè) nào đó
+tìm kiếm 1 địa điểm nào đó trêng pảng đồ
+đề xuất thêm 1 định danh cho vị trí(ý là nó sẽ có thể yêu cầu thêm định danh cho admin như là vị chí lầy là trường học)
+
+
+$ quề admin 
+xem user có trong hệ thống
+ban 1 user nào đó níu vi phạm(danh sách vi phạm sẽ cập nhật *)
+thêm 1 địa điểm nào đó(quáng kà fê, trường học, quáng ân, khách xạng,....... )
