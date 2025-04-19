@@ -1,14 +1,10 @@
 import axios from 'axios';
 import authToken from '../storage/authToken.js';
 
+
 async function register(formData) {
     try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, formData, {
-            headers: {
-                Authorization: `Bearer ${authToken.getToken()}`,
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, formData, {});
         return response.data;
     } catch (error) {
         console.error('Error during registration:', error);
