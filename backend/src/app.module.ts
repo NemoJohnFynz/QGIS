@@ -6,6 +6,8 @@ import { MongooseModule, } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { EventModule } from './event/event.module';
+import { CategoryModule } from './category/category.module';
+
 import { LocationModule } from 'src/location/location.module';
 @Global()
 @Module({
@@ -17,6 +19,8 @@ import { LocationModule } from 'src/location/location.module';
     MongooseModule.forRoot(process.env.MONGO_URI),
     AuthModule,
     CloudinaryModule,
+    EventModule,
+    CategoryModule
     EventModule,
     LocationModule,
   ],
