@@ -91,4 +91,23 @@ import {
     getServer(): Server {
         return this.server;
     }
+
+    @SubscribeMessage('locationUpdate')
+    async handleLocationUpdate(client: Socket, payload: { lat: number; lng: number }) {
+      const userId = this.clientToUser.get(client.id);
+      if (!userId) {
+        throw new WsException('Unauthorized');
+      }
+
+      const position = { userId, lat: payload.lat, lng: payload.lng };
+      this.server.to(client.id).emit('userLocationChanged', position);
+    
+    }
+
+  @SubscribeMessage('userPositionUpdate')
+    handlePositionUpdate(client: Socket, data: any) {
+    console.log('User position update:', data);
+    client.emit('positionUpdated', data);
+  }
+    
 }
