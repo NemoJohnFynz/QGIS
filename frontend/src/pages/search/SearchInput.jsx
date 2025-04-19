@@ -5,11 +5,10 @@ import { useAuth } from "../../context/AuthContext";
 const SearchInput = ({ value, onChange, placeholder }) => {
   const { form, setForm } = useAuth();
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto pointer-events-auto">
       <TextField
         fullWidth
         size="medium"
-        variant="outlined"
         placeholder={placeholder || "Search..."}
         value={value}
         className="flex justify-center items-center"
@@ -43,12 +42,13 @@ const SearchInput = ({ value, onChange, placeholder }) => {
   );
 };
 const Radius = "9999px";
+/** @type {React.CSSProperties} */
 const InputStyler = {
   "& .MuiOutlinedInput-root": {
     borderRadius: Radius,
     backgroundColor: "white",
     boxShadow: 1,
-    paddingRight: "12px", // tạo khoảng cách cho avatar
+    paddingRight: "8px", // tạo khoảng cách cho avatar
     "& fieldset": {
       borderColor: "transparent",
     },
@@ -57,6 +57,15 @@ const InputStyler = {
     },
     "&.Mui-focused fieldset": {
       borderColor: "transparent",
+    },
+    "& input:-webkit-autofill": {
+      WebkitBoxShadow: "0 0 0 1000px white inset",
+      WebkitTextFillColor: "#000",
+      transition: "background-color 5000s ease-in-out 0s",
+    },
+    "& .MuiInputBase-input": {
+      padding: "14px 14px", // hoặc 4px nếu muốn nhỏ hơn
+      fontSize: "0.9rem", // tuỳ chọn nếu muốn chữ nhỏ lại
     },
   },
 };

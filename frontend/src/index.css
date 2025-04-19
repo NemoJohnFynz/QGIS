@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.leaflet-control-zoom {
+    display: none !important;
+}
+
+/* styles.css hoặc trong file global */
+.leaflet-google-marker {
+    animation: drop-slime 0.6s ease-out;
+}
+
+@keyframes drop-slime {
+    0% {
+        transform: translateY(10px) scaleY(0.2);
+        opacity: 0;
+    }
+
+    10% {
+        transform: translateY(20px) scaleY(0.5);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: translateY(-10px) scaleY(1.05);
+        /* Tăng kích thước và di chuyển lên một chút */
+        opacity: 0.7;
+        /* Dần dần hiện ra */
+    }
+
+    75% {
+        transform: translateY(5px) scaleY(1.005);
+        /* Tiếp tục di chuyển và mở rộng nhẹ */
+        opacity: 0.9;
+        /* Gần như đầy đủ */
+    }
+
+    100% {
+        transform: translateY(0) scaleY(1);
+        /* Hoàn thành, cây đã mọc đầy đủ */
+        opacity: 1;
+        /* Hoàn toàn hiển thị */
+    }
+}
