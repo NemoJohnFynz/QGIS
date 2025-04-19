@@ -3,7 +3,7 @@ import { TextField, InputAdornment, Avatar, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAuth } from "../../context/AuthContext";
 const SearchInput = ({ value, onChange, placeholder }) => {
-  const { form, setForm } = useAuth;
+  const { form, setForm } = useAuth();
   return (
     <div className="w-full max-w-4xl mx-auto">
       <TextField
@@ -12,21 +12,26 @@ const SearchInput = ({ value, onChange, placeholder }) => {
         variant="outlined"
         placeholder={placeholder || "Search..."}
         value={value}
+        className="flex justify-center items-center"
         onChange={onChange}
         sx={InputStyler}
-        className="hover:bg-blue-50"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon className="text-gray-500 " fontSize="large" />
+              <SearchIcon
+                sx={{ cursor: "pointer" }}
+                className="text-gray-500 "
+                fontSize="large"
+              />
             </InputAdornment>
           ),
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
-              // onClick={() => {
-              //   setForm("login");
-              // }}
+                onClick={() => {
+                  setForm("login");
+                }}
+                sx={{ padding: "0px" }}
               >
                 <Avatar sx={{ cursor: "pointer" }}>P</Avatar>
               </IconButton>
@@ -37,27 +42,22 @@ const SearchInput = ({ value, onChange, placeholder }) => {
     </div>
   );
 };
-const Radius = "34px";
+const Radius = "9999px";
 const InputStyler = {
-  borderRadius: Radius,
-  backgroundColor: "white",
-  boxShadow: 1,
   "& .MuiOutlinedInput-root": {
     borderRadius: Radius,
-    padding: "0px 2px 0px 10px",
-    "& input": {
-      pointerEvents: "auto",
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
+    backgroundColor: "white",
+    boxShadow: 1,
+    paddingRight: "12px", // tạo khoảng cách cho avatar
+    "& fieldset": {
       borderColor: "transparent",
     },
-  },
-  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderColor: "transparent", // hoặc "gray" nếu muốn nhạt đi
-    boxShadow: "none",
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "transparent", // mặc định
+    "&:hover fieldset": {
+      borderColor: "transparent",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "transparent",
+    },
   },
 };
 
