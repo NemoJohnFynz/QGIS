@@ -76,9 +76,9 @@ export const Map = () => {
   }
 
   return (
-    <div className="w-screen h-screen">
+    <div className="w-screen h-screen  " >
       <MapContainer
-        className="h-full w-full max-w-screen max-h-[100dvh] "
+        className="h-full w-full max-w-screen max-h-[100dvh]"
         center={myLocation}
         zoom={13}
         scrollWheelZoom={true}

@@ -3,7 +3,7 @@ import { Map } from "../map/Map";
 const Home = () => {
   return (
     <>
-      <Map />
+      <div className="relative z-0"><Map /></div>
     </>
   );
 };
