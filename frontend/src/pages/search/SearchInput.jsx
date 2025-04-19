@@ -1,14 +1,9 @@
-import React from "react";
-import {
-  TextField,
-  InputAdornment,
-  Avatar,
-  IconButton,
-  OutlinedInput,
-} from "@mui/material";
+import React, { useContext } from "react";
+import { TextField, InputAdornment, Avatar, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-
+import { useAuth } from "../../context/AuthContext";
 const SearchInput = ({ value, onChange, placeholder }) => {
+  const { form, setForm } = useAuth;
   return (
     <div className="w-full max-w-4xl mx-auto">
       <TextField
@@ -28,7 +23,11 @@ const SearchInput = ({ value, onChange, placeholder }) => {
           ),
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton>
+              <IconButton
+              // onClick={() => {
+              //   setForm("login");
+              // }}
+              >
                 <Avatar sx={{ cursor: "pointer" }}>P</Avatar>
               </IconButton>
             </InputAdornment>
