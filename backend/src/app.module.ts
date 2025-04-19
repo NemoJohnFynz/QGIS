@@ -9,6 +9,7 @@ import { EventModule } from './event/event.module';
 import { CategoryModule } from './category/category.module';
 
 import { LocationModule } from 'src/location/location.module';
+import { MapModule } from './map/map.module';
 @Global()
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { LocationModule } from 'src/location/location.module';
     CategoryModule,
     EventModule,
     LocationModule,
+    MapModule,
   ],
   controllers: [AppController],
   providers: [AppService],

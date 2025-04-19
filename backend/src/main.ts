@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import cors from 'cors'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as csurf from 'csurf';
+
 
 declare const module: any
 async function bootstrap() {
@@ -22,9 +22,6 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true,
   });
-
-  app.use(csurf({ cookie: true }));
-  
 
   const config = new DocumentBuilder()
     .setTitle('Function API QGIS')
