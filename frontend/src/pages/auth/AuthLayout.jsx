@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
-import { AuthContext } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
+import { ButtonBase, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 function AuthLayout() {
-  const { form, setForm } = useContext(AuthContext);
+  const { form, setForm } = useAuth();
+
+  if (!form) return null; // ✅ Đóng layout khi form = null
 
   const toggleForm = () => {
     setForm(form === "login" ? "register" : "login");
@@ -17,13 +21,28 @@ function AuthLayout() {
       case "register":
         return <RegisterForm />;
       default:
-        return <LoginForm />;
+        return null;
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
+    <div
+      onClick={() => setForm("")}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30"
+    >
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        className="relative bg-white p-6 rounded-2xl shadow-xl w-full max-w-md"
+      >
+        {/* Nút Đóng */}
+        <div className="absolute top-2 right-2">
+          <IconButton onClick={() => setForm(null)}>
+            <CloseIcon />
+          </IconButton>
+        </div>
+
         <h2 className="text-2xl font-semibold mb-6 text-center capitalize">
           {form}
         </h2>

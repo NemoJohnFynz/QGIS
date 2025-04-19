@@ -4,17 +4,17 @@ export function RegisterForm() {
       <input
         type="text"
         placeholder="Username"
-        className="w-full p-2 border rounded-lg"
+        className="w-full p-3 border rounded-lg"
       />
       <input
         type="email"
         placeholder="Email"
-        className="w-full p-2 border rounded-lg"
+        className="w-full p-3 border rounded-lg"
       />
       <input
         type="password"
         placeholder="Password"
-        className="w-full p-2 border rounded-lg"
+        className="w-full p-3 border rounded-lg"
       />
       <button
         type="submit"

@@ -1,6 +1,6 @@
-import { AuthContext } from "./AuthContext";
+import { AuthProvider } from "./AuthContext";
 
 // Gói tất cả các provider con
 export const AppContextProvider = ({ children }) => {
-  return <AuthContext>{children}</AuthContext>;
+  return <AuthProvider>{children}</AuthProvider>;
 };

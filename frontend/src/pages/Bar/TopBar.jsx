@@ -6,8 +6,10 @@ import SearchInput from "../search/SearchInput";
 const TopBar = () => {
   return (
     <>
-      <div className="bg-white w-full ">
-        <SearchInput />
+      <div className="absolute w-full z-[999]">
+        <div className="p-2"> 
+          <SearchInput />
+        </div>
       </div>
     </>
   );
