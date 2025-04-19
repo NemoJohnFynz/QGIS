@@ -8,6 +8,7 @@ import { CreateLocationDto } from './dto/createLocation.dto';
 import { AuthGuardD } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/role.guard';
 import { CurrentUser } from 'src/auth/decorator/currentUser.decorator';
+import { User } from 'src/auth/schema/user.schema';
 
 @ApiTags('Location')
 @Controller('location')
@@ -21,7 +22,7 @@ export class LocationController {
     @UseGuards(AuthGuardD)
     async createCategory(
         @Body() createLocationDto: CreateLocationDto,
-        @CurrentUser() user: any,
+        @CurrentUser() currentUser: User,
     ) {
         try {
             const newCategory = await this.locationService.createLocation(createLocationDto);
