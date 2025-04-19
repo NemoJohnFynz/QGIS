@@ -14,12 +14,7 @@ async function register(formData) {
 
 async function login(formData) {
     try {
-        const response = await axios.post('/api/auth/login', formData, {
-            headers: {
-                Authorization: `Bearer ${authToken.getToken()}`,
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, formData, {});
         return response.data;
     } catch (error) {
         console.error('Error during login:', error);
