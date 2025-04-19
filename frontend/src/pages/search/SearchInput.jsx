@@ -1,6 +1,5 @@
-// components/SearchInput.jsx
 import React from "react";
-import { TextField, InputAdornment, Avatar } from "@mui/material";
+import { TextField, InputAdornment, Avatar, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 const SearchInput = ({ value, onChange, placeholder }) => {
@@ -20,13 +19,19 @@ const SearchInput = ({ value, onChange, placeholder }) => {
               <SearchIcon className="text-gray-500" />
             </InputAdornment>
           ),
-          endAdornment: <Avatar>P</Avatar>,
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton edge="end" sx={{ p: 0 }}>
+                <Avatar sx={{ cursor: "pointer" }}>P</Avatar>
+              </IconButton>
+            </InputAdornment>
+          ),
         }}
       />
     </div>
   );
 };
-/** @type {React.CSSProperties} */
+
 const InputStyler = {
   borderRadius: "30px",
   backgroundColor: "white",
@@ -34,9 +39,10 @@ const InputStyler = {
   "& .MuiOutlinedInput-root": {
     borderRadius: "30px",
     padding: "6px",
+    "& input": {
+      pointerEvents: "auto",
+    },
   },
 };
-const AvtStyler = {
-    
-}
+
 export default SearchInput;
