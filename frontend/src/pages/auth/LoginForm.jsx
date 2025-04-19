@@ -1,4 +1,8 @@
+import { useAuth } from "../../context/AuthContext";
+import authToken from "../../storage/authToken";
 export function LoginForm() {
+  const { user, setUser } = useAuth();
+  const token = authToken.getToken();
   return (
     <form className="space-y-4">
       <input
