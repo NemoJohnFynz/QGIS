@@ -5,15 +5,15 @@ import MainLayout from "../layout/nainLayout";
 import { AppContextProvider } from "../context/AppContextProvider";
 const AppRouter = () => {
   return (
-    <Router>
-      <AppContextProvider>
+    <AppContextProvider>
+      <Router>
         <Routes>
           <Route path="/" element={<MainLayout />}>
             {/* Add more routes if needed */}
           </Route>
         </Routes>
-      </AppContextProvider>
-    </Router>
+      </Router>{" "}
+    </AppContextProvider>
   );
 };
 
