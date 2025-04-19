@@ -2,6 +2,7 @@ import React from "react";
 import SearchInput from "../search/SearchInput";
 
 const TopBar = () => {
+
   return (
     <>
       <div
