@@ -20,11 +20,11 @@ import { LocationModule } from 'src/location/location.module';
     AuthModule,
     CloudinaryModule,
     EventModule,
-    CategoryModule
+    CategoryModule,
     EventModule,
     LocationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
