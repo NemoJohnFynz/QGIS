@@ -1,8 +1,8 @@
 import React from "react";
 import SearchInput from "../search/SearchInput";
+import LeftBar from "./LeftBar";
 
 const TopBar = () => {
-
   return (
     <>
       <div

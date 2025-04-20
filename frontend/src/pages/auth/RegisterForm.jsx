@@ -16,7 +16,7 @@ export function RegisterForm() {
     password: "",
     confirmPassword: "",
   });
-  const { setForm } = useAuth()
+  const { setForm } = useAuth();
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false); // New state for success message
@@ -92,11 +92,10 @@ export function RegisterForm() {
     } finally {
       setLoading(false);
       setTimeout(() => {
-        setForm("") // Reset success state after 3 seconds
+        setForm(""); // Reset success state after 3 seconds
       }, 3000);
     }
   };
-
 
   return (
     <div>
@@ -143,7 +142,9 @@ export function RegisterForm() {
           maxLength={11}
           required
         />
-        {error.numberPhone && <p className="text-red-500 text-sm">{error.numberPhone}</p>}
+        {error.numberPhone && (
+          <p className="text-red-500 text-sm">{error.numberPhone}</p>
+        )}
         <input
           type="text"
           placeholder="Address"
@@ -160,7 +161,11 @@ export function RegisterForm() {
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={formData.gender}
-            onChange={(e) => handleChange({ target: { name: "gender", value: e.target.value } })}
+            onChange={(e) =>
+              handleChange({
+                target: { name: "gender", value: e.target.value },
+              })
+            }
             label="Gender"
           >
             <MenuItem value={true}>Male</MenuItem>
@@ -175,44 +180,48 @@ export function RegisterForm() {
           className="w-full p-3 border rounded-lg"
           required
         />
-        {error.birthday && <p className="text-red-500 text-sm">{error.birthday}</p>}
-        <input
-          type="password"
-          placeholder="Password"
-          name="password"
-          onChange={handleChange}
-          value={formData.password}
-          className="w-full p-3 border rounded-lg"
-          required
-        />
-        {error.password && <p className="text-red-500 text-sm">{error.password}</p>}
-        <input
-          type="password"
-          placeholder="Comfirm Password"
-          name="confirmPassword"
-          onChange={handleChange}
-          value={formData.confirmPassword}
-          className="w-full p-3 border rounded-lg"
-          required
-        />
-        {error.confirmPassword && (
-          <p className="text-red-500 text-sm ">{error.confirmPassword}</p>
+        {error.birthday && (
+          <p className="text-red-500 text-sm">{error.birthday}</p>
         )}
+        <div className="flex gap-3">
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            onChange={handleChange}
+            value={formData.password}
+            className="w-full p-3 border rounded-lg"
+            required
+          />
+          {error.password && (
+            <p className="text-red-500 text-sm">{error.password}</p>
+          )}
+          <input
+            type="password"
+            placeholder="Comfirm Password"
+            name="confirmPassword"
+            onChange={handleChange}
+            value={formData.confirmPassword}
+            className="w-full p-3 border rounded-lg"
+            required
+          />
+          {error.confirmPassword && (
+            <p className="text-red-500 text-sm ">{error.confirmPassword}</p>
+          )}
+        </div>
         {success ? (
           <SimpleAlert mess={"Register successful"} />
+        ) : loading ? (
+          <div className="flex justify-center items-center">
+            <Loading />
+          </div>
         ) : (
-          loading ? (
-            <div className="flex justify-center items-center">
-              <Loading />
-            </div>
-          ) : (
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300"
-            >
-              Register
-            </button>
-          )
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300"
+          >
+            Register
+          </button>
         )}
       </form>
     </div>

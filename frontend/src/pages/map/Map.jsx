@@ -27,7 +27,7 @@ export const Map = () => {
     return <div>Loading your location...</div>;
   }
   return (
-    <div className="w-screen h-screen  ">
+    <div className="w-full h-screen  ">
       <MapContainer
         className="h-full w-full max-w-screen max-h-[100dvh]"
         center={myLocation}

@@ -9,6 +9,7 @@ export const LocationProvider = ({ children }) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+         
           setMyLocation([position.coords.latitude, position.coords.longitude]);
         },
         (error) => {
@@ -19,6 +20,7 @@ export const LocationProvider = ({ children }) => {
       setLocationError("Geolocation is not supported by this browser.");
     }
   }, []);
+  
   return (
     <LocationContext.Provider
       value={{
