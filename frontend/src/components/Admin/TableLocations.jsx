@@ -63,7 +63,7 @@ export default function TableLocations({ query }) {
                                 <div className="avatar">
                                     <div className="mask mask-squircle ">
                                         <img
-                                            src={l.images || "https://via.placeholder.com/150"}
+                                            src={l.images || "https://th.bing.com/th/id/OIP.3dQJdd3puXqdw9pDmNrK4QHaH0?rs=1&pid=ImgDetMain"}
                                             alt="images"
                                             className="object-cover h-12 w-12"
                                         />
