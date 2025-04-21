@@ -4,6 +4,7 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import Loading from "../../components/Loading";
 import SimpleAlert from "../../components/Alert";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 export function RegisterForm() {
   const [formData, setFormData] = useState({
     numberPhone: "",
@@ -86,14 +87,16 @@ export function RegisterForm() {
         console.log("Đăng ký thành công:");
         setSuccess(true); // Set success state to true
       }
+      toast.success('Đăng ký thành công')
+            // setTimeout(() => {
+      //   setForm(""); // Reset success state after 3 seconds
+      // }, 3000);
     } catch (error) {
       console.error("Error during registration:", error);
       setError({ server: "Đã xảy ra lỗi trong quá trình đăng ký" });
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        setForm(""); // Reset success state after 3 seconds
-      }, 3000);
+
     }
   };
 

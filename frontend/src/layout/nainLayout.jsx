@@ -8,12 +8,10 @@ import TopBar from "../pages/Bar/TopBar";
 const sidebarWidth = 208; // 52 * 4
 
 const MainLayout = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  console.log(isCollapsed);
+  const [isCollapsed, setIsCollapsed] = useState(false); 
   return (
     <>
-      {/* Sidebar cố định bên trái */}
-      <LeftBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      {/* <LeftBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} /> */}
       <main
         className={`transition-all duration-300 ease-in-out
           h-screen w-full   ${isCollapsed ? "pl-0" : `pl-[${sidebarWidth}px]`}

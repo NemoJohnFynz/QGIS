@@ -4,25 +4,28 @@ import { useAuth } from "../../context/AuthContext";
 import authToken from "../../storage/authToken";
 import Loading from "../../components/Loading";
 import SimpleAlert from "../../components/Alert";
+import { toast } from "react-toastify";
 export function LoginForm() {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false); // New state for success message
-  const { setForm } = useAuth()
-  //validate 
+  const { setForm } = useAuth();
+  //validate
   const validateForm = () => {
     const validationErrors = {};
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.identifier);
     const isPhoneNumber = /^[0-9]{10,15}$/.test(formData.identifier);
 
     if (!formData.identifier) {
-      validationErrors.identifier = 'Vui lòng nhập email hoặc số điện thoại.';
+      validationErrors.identifier = "Vui lòng nhập email hoặc số điện thoại.";
     } else if (!isEmail && !isPhoneNumber) {
-      validationErrors.identifier = 'Định dạng không hợp lệ. Vui lòng nhập email hoặc số điện thoại.';
+      validationErrors.identifier =
+        "Định dạng không hợp lệ. Vui lòng nhập email hoặc số điện thoại.";
     }
 
-    if (!formData.password) validationErrors.password = 'Vui lòng nhập mật khẩu.';
+    if (!formData.password)
+      validationErrors.password = "Vui lòng nhập mật khẩu.";
     return validationErrors;
   };
 
@@ -55,13 +58,15 @@ export function LoginForm() {
         if (response) {
           authToken.setToken(response.accessToken); // Save the token
           setSuccess(true); // Set success state to true
+          toast.success("Đăng nhập thành công");
+          setForm("");
         }
       } catch (error) {
-        console.error('Lỗi:', error.response?.data || error.message);
-      }
-      finally {
+        toast.error("Lỗi:", error.response?.data?.message || error.message);
+        console.error("Lỗi:", error.response?.data || error.message);
+      } finally {
         setLoading(false);
-        setTimeout(() => setForm(""), 3000); // Redirect after 2 seconds
+        // setTimeout(() => setForm(""), 3000); // Redirect after 2 seconds
       }
     } else {
       setErrors(validationErrors);
@@ -77,7 +82,9 @@ export function LoginForm() {
         placeholder="Email or Phone Number"
         className="w-full p-3 border rounded-lg"
       />
-      {errors.identifier && <p className="text-red-500 text-sm mt-2">{errors.identifier}</p>}
+      {errors.identifier && (
+        <p className="text-red-500 text-sm mt-2">{errors.identifier}</p>
+      )}
       <input
         type="password"
         name="password"
@@ -86,22 +93,22 @@ export function LoginForm() {
         placeholder="Password"
         className="w-full p-3 border rounded-lg"
       />
-      {errors.password && <p className="text-red-500 text-sm mt-2">{errors.password}</p>}
+      {errors.password && (
+        <p className="text-red-500 text-sm mt-2">{errors.password}</p>
+      )}
       {success ? (
         <SimpleAlert mess={"Login successful"} />
+      ) : loading ? (
+        <div className="flex justify-center items-center">
+          <Loading />
+        </div>
       ) : (
-        loading ? (
-          <div className="flex justify-center items-center">
-            <Loading />
-          </div>
-        ) : (
-          <button
-            type="submit"
-            className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-500"
-          >
-            Login
-          </button>
-        )
+        <button
+          type="submit"
+          className="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-500"
+        >
+          Login
+        </button>
       )}
     </form>
   );

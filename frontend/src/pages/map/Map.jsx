@@ -18,7 +18,7 @@ export const Map = () => {
   );
 
   useEffect(() => {
-    console.log(chaneLocation);
+    // console.log(chaneLocation);
   }, [chaneLocation]);
   if (locationError) {
     return <div>{locationError}</div>;
