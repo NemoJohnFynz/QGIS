@@ -124,6 +124,9 @@ const FriendModel = () => {
               <List>
                 {activeList.map((item) => (
                   <Button
+                    onClick={() => {
+                      toggleModel("chat");
+                    }}
                     key={item.id + item.name}
                     sx={{
                       width: "100%",

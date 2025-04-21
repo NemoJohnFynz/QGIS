@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Menu as MenuIcon,
   Chat,
@@ -18,12 +18,11 @@ const menuItems = [
 ];
 
 const FloatingMenu = () => {
-  const { toggleModel, openModel, handleMenuToggle, showMenu, setShowMenu } =
-    useMenu();
+  const { toggleModel, openModel, handleMenuToggle, showMenu, setShowMenu } = useMenu();
+  const menuRef = useRef(null);
 
   const handleClick = (key) => {
     if (key === "logout") {
-      // Xử lý đăng xuất ở đây
       console.log("Logging out...");
       authToken.deleteToken();
       window.location.reload();
@@ -34,15 +33,25 @@ const FloatingMenu = () => {
     setShowMenu(false);
   };
 
-  return (
-    <div className="fixed top-2 right-2 flex flex-col items-end gap-2 z-50">
-      <button
-        onClick={handleMenuToggle}
-        className="p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition"
-      >
-        <MenuIcon />
-      </button>
+  // 👇 Đóng menu khi click ra ngoài
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
 
+    if (showMenu) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [showMenu, setShowMenu]);
+
+  return (
+    <div className="fixed top-16 right-2 z-50 pointer-events-none space-y-1" ref={menuRef}>
       <AnimatePresence>
         {showMenu &&
           menuItems.map((item, index) => (
@@ -52,7 +61,7 @@ const FloatingMenu = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.6, y: 10 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className={`flex items-center gap-2 bg-white rounded-xl shadow-md px-6 py-4 w-56 cursor-pointer border ${
+              className={`flex items-center gap-2 bg-white rounded-xl shadow-md px-6 py-4 w-56 cursor-pointer border pointer-events-auto ${
                 openModel === item.key ? "ring-2 ring-blue-500" : ""
               }`}
               onClick={() => handleClick(item.key)}
