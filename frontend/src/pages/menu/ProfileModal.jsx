@@ -120,9 +120,9 @@ const ProfileModal = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold mb-2">Profile</h2>
         {!tab ? (
-          <button onClick={handleTab}><ModeEdit /></button>
+          <button onClick={handleTab}><ModeEdit className="text-blue-500" /></button>
         ) : (
-          <button onClick={handleTab}><Cancel /></button>
+          <button onClick={handleTab}><Cancel className="text-red-500" /></button>
         )}
       </div>
 
