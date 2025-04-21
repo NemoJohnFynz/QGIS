@@ -21,6 +21,7 @@ import {
   
     @Post('createCategory')
     @UseGuards(new RolesGuard(true), AuthGuardD)
+    @UseGuards(AuthGuardD)
     @ApiOperation({ summary: 'Tạo danh mục mới (chỉ Admin)' })
     @ApiResponse({ status: 201, description: 'Tạo thành công danh mục.' })
     @ApiResponse({ status: 400, description: 'Yêu cầu không hợp lệ.' })
@@ -35,6 +36,7 @@ import {
   
     @Put('updateCategory/:id')
     @UseGuards(new RolesGuard(true), AuthGuardD)
+    @UseGuards(AuthGuardD)
     @ApiOperation({ summary: 'Cập nhật danh mục theo ID (chỉ Admin)' })
     @ApiResponse({ status: 200, description: 'Cập nhật thành công.' })
     @ApiResponse({ status: 404, description: 'Không tìm thấy danh mục.' })
@@ -51,6 +53,7 @@ import {
   
     @Delete('deleteCategory/:id')
     @UseGuards(new RolesGuard(true), AuthGuardD)
+    @UseGuards(AuthGuardD)
     @ApiOperation({ summary: 'Xóa danh mục theo ID (chỉ Admin)' })
     @ApiResponse({ status: 200, description: 'Xóa thành công.' })
     @ApiResponse({ status: 404, description: 'Không tìm thấy danh mục.' })
