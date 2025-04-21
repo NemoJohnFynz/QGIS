@@ -6,6 +6,7 @@ import { LocationController } from './location.controller';
 import { LocationSchema } from './schema/location.schema';
 import { AuthModule } from 'src/auth/auth.module';
 import { ReviewSchema } from './schema/review.schema';
+import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 @Module({
     imports: [
 
@@ -18,11 +19,11 @@ import { ReviewSchema } from './schema/review.schema';
         MongooseModule.forFeature([
             {
                 name: 'Review',
-
                 schema: ReviewSchema,
             },
         ]),
-        AuthModule
+        AuthModule,
+        CloudinaryModule,
     ],
     controllers: [LocationController],
     providers: [LocationService],

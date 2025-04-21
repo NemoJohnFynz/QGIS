@@ -226,7 +226,7 @@ import {
     async addMembersToGroup(
       @CurrentUser() currentUser: User,
       @Param('groupId') groupId: Types.ObjectId,
-      @Body() addMembersToGroupDto: addMembersToGroupDto, // Lấy toàn bộ DTO
+      @Body() addMembersToGroupDto: addMembersToGroupDto, 
     ) {
       try {
         if (!currentUser) {
