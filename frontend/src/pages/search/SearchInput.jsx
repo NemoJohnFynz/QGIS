@@ -55,7 +55,7 @@ const SearchInput = ({ value, onChange, placeholder }) => {
   );
 
   return (
-    <div className="w-full max-w-4xl mx-auto pointer-events-auto flex gap-2 items-center">
+    <div className="w-full max-w-4xl mx-auto pointer-events-auto flex  gap-2 items-center">
       {/* Dropdown thể loại */}
       <div>
         <Button
@@ -66,7 +66,7 @@ const SearchInput = ({ value, onChange, placeholder }) => {
             textTransform: "none",
             borderRadius: "9999px",
             fontSize: "0.85rem",
-            maxWidth: "150px", // giới hạn chiều rộng
+            maxWidth: "80px", // giới hạn chiều rộng
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",

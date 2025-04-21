@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { current } from "../service/auth";
-import authToken from "../storage/authToken";
+import authToken from "../storage/authToken"; 
 /**
  * @typedef {Object} AuthContextType
  * @property {string|null} form
@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
     const fetchCurrent = async () => {
       try {
         const rs = await current(); // chờ API trả kết quả
+
         if (rs.status === 200) {
           setUserData(rs.data);
         }

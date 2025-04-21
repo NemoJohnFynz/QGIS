@@ -44,3 +44,12 @@
         /* Hoàn toàn hiển thị */
     }
 }
+
+.leaflet-routing-drag.dragging {
+    /* Thử các thuộc tính CSS sau để cải thiện hiệu suất khi kéo */
+    will-change: transform;
+    /* Gợi ý cho trình duyệt tối ưu hóa cho các thay đổi transform */
+    /* Các thuộc tính khác có thể thử: */
+    /* pointer-events: none;  Ngăn chặn tương tác trong khi kéo (nếu không cần thiết) */
+    /* opacity: 0.8; Giảm độ mờ một chút trong khi kéo */
+}
