@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Home,
+    Dashboard,
     Person,
     LocationOn
 } from "@mui/icons-material";
@@ -12,11 +12,11 @@ export default function SideBar() {
         <div className="p-2 w-full h-full bg-black">
             <div >
                 <Link
-                    to={"/"}
+                    to={"/admin"}
                     className={` p-4 flex items-center rounded-md ${isActiveTab("/") ? "bg-[#1D1D1D]" : "hover:bg-[#353535]"}`}
                 >
-                    <Home />
-                    <span className="px-10">Home</span>
+                    <Dashboard />
+                    <span className="px-10">Dashboard</span>
                 </Link>
                 <Link
                     to={"/users"}
@@ -26,7 +26,7 @@ export default function SideBar() {
                     <span className="px-10">Users</span>
                 </Link>
                 <Link
-                    to={"/users"}
+                    to={"locations"}
                     className={` p-4 flex items-center rounded-md ${isActiveTab("/") ? "bg-[#1D1D1D]" : "hover:bg-[#353535]"}`}
                 >
                     <LocationOn />
