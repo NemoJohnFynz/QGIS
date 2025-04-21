@@ -1,5 +1,12 @@
-import React, { useContext, useState } from "react";
-import { TextField, InputAdornment, Avatar, IconButton } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  TextField,
+  InputAdornment,
+  Avatar,
+  IconButton,
+  ButtonBase,
+  Button,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAuth } from "../../context/AuthContext";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,7 +21,6 @@ const menuItems = [
 const SearchInput = ({ value, onChange, placeholder }) => {
   const { handleMenuToggle } = useMenu();
   const { form, setForm, userData, isProfile } = useAuth();
-
   const handleAvatar = () => {
     if (isProfile && userData) {
       handleMenuToggle();
@@ -50,7 +56,30 @@ const SearchInput = ({ value, onChange, placeholder }) => {
                 }}
                 sx={{ padding: "0px" }}
               >
-                <Avatar sx={{ cursor: "pointer" }}>P</Avatar>
+                {isProfile && userData ? (
+                  <Avatar sx={{ cursor: "pointer" }}>P</Avatar>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={handleAvatar}
+                    sx={{
+                      borderRadius: "20px",
+                      textTransform: "none",
+                      fontSize: "0.8rem",
+                      padding: "2px 12px",
+                      height: "32px",
+                      color: "#1976d2",
+                      borderColor: "#1976d2",
+                      "&:hover": {
+                        backgroundColor: "#e3f2fd",
+                        borderColor: "#1976d2",
+                      },
+                    }}
+                  >
+                    Login
+                  </Button>
+                )}
               </IconButton>
             </InputAdornment>
           ),
