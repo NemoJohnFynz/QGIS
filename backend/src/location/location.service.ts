@@ -5,11 +5,14 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateLocationDto } from './dto/createLocation.dto';
 import { Location } from './schema/location.schema';
 import { UpdateLocationDto } from './dto/updateLocation.dto';
+import { CreateReviewDto } from './dto/createReview.dto';
+import { Review } from './schema/review.schema';
 
 @Injectable()
 export class LocationService {
     constructor(
         @InjectModel(Location.name) private locationModel: Model<Location>,
+        @InjectModel('Review') private reviewModel: Model<Review>,
         private readonly cloudinaryService: CloudinaryService,
     ) { }
 
@@ -222,5 +225,30 @@ export class LocationService {
         return location;
     }
 
-    async 
+    async createReview(createReviewDto: CreateReviewDto): Promise<Review> {
+      const { user, location, rating, comment } = createReviewDto;
+  
+      const newReview = new this.reviewModel({
+        user,
+        location,
+        rating,
+        comment,
+      });
+  
+      return newReview.save();
+    }
+
+    async getReviewInLocation(locationId: string): Promise<Review[]> {
+      const location = await this.locationModel.findById(locationId);
+      if (!location) {
+        throw new NotFoundException('Location not found');
+      }
+      const reviews = await this.reviewModel.find({ location: locationId }).exec();
+      if (!reviews || reviews.length === 0) {
+        throw new NotFoundException('No reviews found for this location');
+      }
+      return reviews;
+    }
+
+    
 }

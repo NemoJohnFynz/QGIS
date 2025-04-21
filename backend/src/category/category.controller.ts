@@ -20,7 +20,7 @@ import {
     constructor(private readonly categoryService: CategoryService) {}
   
     @Post('createCategory')
-    @UseGuards(new RolesGuard(true), AuthGuardD)
+    @UseGuards(new RolesGuard(true))
     @UseGuards(AuthGuardD)
     @ApiOperation({ summary: 'Tạo danh mục mới (chỉ Admin)' })
     @ApiResponse({ status: 201, description: 'Tạo thành công danh mục.' })
@@ -35,7 +35,7 @@ import {
     }
   
     @Put('updateCategory/:id')
-    @UseGuards(new RolesGuard(true), AuthGuardD)
+    @UseGuards(new RolesGuard(true))
     @UseGuards(AuthGuardD)
     @ApiOperation({ summary: 'Cập nhật danh mục theo ID (chỉ Admin)' })
     @ApiResponse({ status: 200, description: 'Cập nhật thành công.' })
