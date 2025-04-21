@@ -1,6 +1,7 @@
 import React from "react";
 import SearchInput from "../search/SearchInput";
 import LeftBar from "./LeftBar";
+import FloatingMenu from "./FloatingMenu";
 
 const TopBar = () => {
   return (
@@ -10,7 +11,7 @@ const TopBar = () => {
         style={{ top: 0 }}
       >
         <div className="p-2">
-          <SearchInput />
+          <SearchInput /> 
         </div>
       </div>
     </>

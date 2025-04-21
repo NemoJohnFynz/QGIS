@@ -1,9 +1,33 @@
-import React, { useContext } from "react";
-import { TextField, InputAdornment, Avatar, IconButton } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  TextField,
+  InputAdornment,
+  Avatar,
+  IconButton,
+  ButtonBase,
+  Button,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAuth } from "../../context/AuthContext";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu as MenuIcon, Chat, Person } from "@mui/icons-material";
+import { useMenu } from "../../context/MenuContext";
+
+const menuItems = [
+  { icon: <Chat />, label: "Chat" },
+  { icon: <Person />, label: "Profile" },
+];
+
 const SearchInput = ({ value, onChange, placeholder }) => {
-  const { form, setForm } = useAuth();
+  const { handleMenuToggle } = useMenu();
+  const { form, setForm, userData, isProfile } = useAuth();
+  const handleAvatar = () => {
+    if (isProfile && userData) {
+      handleMenuToggle();
+    } else {
+      setForm("login");
+    }
+  };
   return (
     <div className="w-full max-w-4xl mx-auto pointer-events-auto">
       <TextField
@@ -28,11 +52,34 @@ const SearchInput = ({ value, onChange, placeholder }) => {
             <InputAdornment position="end">
               <IconButton
                 onClick={() => {
-                  setForm("login");
+                  handleAvatar();
                 }}
                 sx={{ padding: "0px" }}
               >
-                <Avatar sx={{ cursor: "pointer" }}>P</Avatar>
+                {isProfile && userData ? (
+                  <Avatar sx={{ cursor: "pointer" }}>P</Avatar>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={handleAvatar}
+                    sx={{
+                      borderRadius: "20px",
+                      textTransform: "none",
+                      fontSize: "0.8rem",
+                      padding: "2px 12px",
+                      height: "32px",
+                      color: "#1976d2",
+                      borderColor: "#1976d2",
+                      "&:hover": {
+                        backgroundColor: "#e3f2fd",
+                        borderColor: "#1976d2",
+                      },
+                    }}
+                  >
+                    Login
+                  </Button>
+                )}
               </IconButton>
             </InputAdornment>
           ),
