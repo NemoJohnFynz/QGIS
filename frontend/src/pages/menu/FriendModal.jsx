@@ -32,7 +32,7 @@ const FriendModel = () => {
   const { toggleModel } = useMenu();
   return (
     <Paper
-      className="fixed bottom-5 right-5 p-0 rounded-xl w-80 z-50 shadow-xl"
+      className="fixed bottom-5 right-5 p-0 rounded-xl w-80   shadow-xl"
       sx={{ boxShadow: 3 }}
     >
       {/* Sticky Header */}

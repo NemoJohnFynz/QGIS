@@ -52,7 +52,7 @@ const FloatingMenu = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.6, y: 10 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className={`flex items-center gap-2 bg-white rounded-xl shadow-md px-6 py-4 w-56 cursor-pointer ${
+              className={`flex items-center gap-2 bg-white rounded-xl shadow-md px-6 py-4 w-56 cursor-pointer border ${
                 openModel === item.key ? "ring-2 ring-blue-500" : ""
               }`}
               onClick={() => handleClick(item.key)}
