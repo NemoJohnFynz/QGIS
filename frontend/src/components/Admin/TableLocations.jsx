@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import { getAllLocation } from '../../service/admin';
 import Loading from '../Loading';
+import { Link } from 'react-router-dom';
 
 export default function TableLocations({ query }) {
     const [locations, setLocations] = useState([]);
@@ -59,17 +60,13 @@ export default function TableLocations({ query }) {
                     <tr key={l._id} className="hover:bg-gray-700">
                         <td className='px-4 py-2'>{index + 1}</td>
                         <td className="px-4 py-2">
-                            <div className="flex items-center gap-3">
-                                <div className="avatar">
-                                    <div className="mask mask-squircle ">
-                                        <img
-                                            src={l.images || "https://th.bing.com/th/id/OIP.3dQJdd3puXqdw9pDmNrK4QHaH0?rs=1&pid=ImgDetMain"}
-                                            alt="images"
-                                            className="object-cover h-12 w-12"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+
+                            <img
+                                src={l.images || "https://th.bing.com/th/id/OIP.3dQJdd3puXqdw9pDmNrK4QHaH0?rs=1&pid=ImgDetMain"}
+                                alt="images"
+                                className="object-cover h-12 w-12 rounded-sm"
+                            />
+
                         </td>
                         <td>
                             <div className="font-bold ">{l.name}</div>
@@ -82,7 +79,9 @@ export default function TableLocations({ query }) {
                         <td className="px-4 py-2 ">
                             <span className="badge badge-ghost badge-sm">{l.contact.phone}</span>
                         </td>
-                        <td className="px-4 py-2 ">{l.website}</td>
+                        <td className="px-4 py-2 ">
+                            <Link className='text-blue-500 underline text-nowrap'>{l.contact.website}</Link>
+                        </td>
                     </tr>
                 ))
             )}
