@@ -104,10 +104,25 @@ import {
     
     }
 
-  @SubscribeMessage('userPositionUpdate')
-    handlePositionUpdate(client: Socket, data: any) {
-    console.log('User position update:', data);
-    client.emit('positionUpdated', data);
-  }
+    @SubscribeMessage('userPositionUpdate')
+      handlePositionUpdate(client: Socket, data: any) {
+      console.log('User position update:', data);
+      client.emit('positionUpdated', data);
+    }
+
+    @SubscribeMessage('all_send')
+    handleAllSend(client: Socket, payload: { id: string[], api: any }) {
+      const { id, api } = payload;
+    
+      for (const userId of id) {
+        this.server.to(`user:${userId}`).emit('notification', {
+          from: this.clientToUser.get(client.id), // sender
+          to: userId,
+          data: api,
+        });
+      }
+    
+      console.log(`📤 Gửi thông báo đến: ${id.join(', ')}`);
+    }
     
 }
