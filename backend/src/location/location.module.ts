@@ -5,6 +5,7 @@ import { LocationService } from './location.service';
 import { LocationController } from './location.controller';
 import { LocationSchema } from './schema/location.schema';
 import { AuthModule } from 'src/auth/auth.module';
+import { ReviewSchema } from './schema/review.schema';
 @Module({
     imports: [
 
@@ -12,6 +13,13 @@ import { AuthModule } from 'src/auth/auth.module';
             {
                 name: 'Location',
                 schema: LocationSchema,
+            },
+        ]),
+        MongooseModule.forFeature([
+            {
+                name: 'Review',
+
+                schema: ReviewSchema,
             },
         ]),
         AuthModule

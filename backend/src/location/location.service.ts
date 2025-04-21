@@ -1,5 +1,5 @@
 import { Model, Types } from 'mongoose';
-import { Injectable, NotFoundException, ConflictException, } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, BadRequestException, } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { CreateLocationDto } from './dto/createLocation.dto';
@@ -12,23 +12,18 @@ export class LocationService {
     ) { }
 
     async createLocation(createLocationDto: CreateLocationDto): Promise<Location> {
-        const { name, address, phone, latitude, longitude } = createLocationDto;
-
-        const existingLocation = await this.locationModel.findOne({ name });
-        if (existingLocation) {
-            throw new ConflictException('Location already exists');
+        const existing = await this.locationModel.findOne({ name: createLocationDto.name });
+        if (existing) {
+          throw new BadRequestException('Tên địa điểm đã tồn tại');
         }
-
+    
         const newLocation = new this.locationModel({
-            name,
-            address,
-            phone,
-            latitude,
-            longitude,
+          ...createLocationDto,
+          reviews: [],
         });
-
+    
         return newLocation.save();
-    }
+      }
 
     async getAllLocations(): Promise<Location[]> {
         return this.locationModel.find().exec();
@@ -41,4 +36,14 @@ export class LocationService {
         }
         return location;
     }
+
+    async getLcocationByName(name: string): Promise<Location[]> {
+        const locations = await this.locationModel.find({ name: { $regex: name, $options: 'i' } }).exec();
+        if (!locations || locations.length === 0) {
+            throw new NotFoundException('Location not found');
+        }
+        return locations;
+    }
+
+    // async updateLocation(id: string, )
 }

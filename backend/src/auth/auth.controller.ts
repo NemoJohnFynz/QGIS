@@ -207,4 +207,24 @@ export class AuthController {
     return this.authService.getMyFriend(swageUserId);
   } //check
 
+  @ApiBearerAuth()
+  @Get('getUserByName/:name')
+  @UseGuards(AuthGuardD)
+  async getuserByName(
+    @CurrentUser() currentUser: User,
+    @Param('name') name: string,
+  ) {
+    return this.authService.getuserByName(name, currentUser._id.toString());
+  }
+
+  @ApiBearerAuth()
+  @Post('getUserbyNumberPhone/:numberPhone')
+  @UseGuards(AuthGuardD)
+  async getUserByNumberPhone(
+    @CurrentUser() currentUser: User,
+    @Param('numberPhone') numberPhone: string,
+  ) {
+    return this.authService.getUserByNumberPhone(numberPhone, currentUser._id.toString());
+  }
+
 }

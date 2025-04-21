@@ -33,7 +33,6 @@ export class LocationController {
     }
 
     @Get('getAllLocations')
-    // @UseGuards(AuthGuardD)
     async getAllLocations() {
         return this.locationService.getAllLocations()
     }

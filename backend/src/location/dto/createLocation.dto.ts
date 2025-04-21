@@ -1,39 +1,104 @@
 import {
-    IsBoolean,
-    IsEmail,
+    IsArray,
     IsNotEmpty,
-    IsNumber,
     IsOptional,
     IsString,
-    MinLength,
-    ValidateIf,
-    MaxLength,
-} from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-
-export class CreateLocationDto {
-    @ApiProperty({ example: 'Quán Coffee Tình đắng như Cà Phê' })
+    IsNumber,
+    IsObject,
+    ValidateNested,
+  } from 'class-validator';
+  import { Type } from 'class-transformer';
+  import { ApiProperty } from '@nestjs/swagger';
+  
+  class OpeningHourDto {
+    @ApiProperty({ example: 'Monday' })
+    @IsString()
+    day: string;
+  
+    @ApiProperty({ example: '08:00', required: false })
+    @IsOptional()
+    @IsString()
+    open?: string;
+  
+    @ApiProperty({ example: '22:00', required: false })
+    @IsOptional()
+    @IsString()
+    close?: string;
+  
+    @ApiProperty({ example: false, required: false })
+    @IsOptional()
+    isClosed?: boolean;
+  }
+  
+  class MenuItemDto {
+    @ApiProperty()
+    @IsString()
+    name: string;
+  
+    @ApiProperty()
+    @IsNumber()
+    price: number;
+  
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    image?: string;
+  
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    description?: string;
+  }
+  
+  export class CreateLocationDto {
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     name: string;
-
-    @ApiProperty({ example: '123 Main St, City, Country' })
+  
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    address: string;
-
-    @ApiProperty({ example: '+1234567890' })
-    @IsNumber()
+    description: string;
+  
+    @ApiProperty({ type: [String], required: false })
     @IsOptional()
-    phone?: number;
-
-    @ApiProperty({ example: 12.345678 })
-    @IsNumber()
-    @IsNotEmpty()
-    latitude: number;
-
-    @ApiProperty({ example: 98.765432 })
-    @IsNumber()
-    @IsNotEmpty()
-    longitude: number;
-}
+    @IsArray()
+    images?: string[];
+  
+    @ApiProperty({ example: { type: 'Point', coordinates: [105.85, 21.02] } })
+    @IsObject()
+    location: {
+      type: string;
+      coordinates: number[];
+    };
+  
+    @ApiProperty({ type: [String], required: false })
+    @IsOptional()
+    @IsArray()
+    categories?: string[];
+  
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString()
+    address?: string;
+  
+    @ApiProperty({ example: { phone: '0123456789', website: 'https://abc.com' }, required: false })
+    @IsOptional()
+    contact?: Map<string, string>;
+  
+    @ApiProperty({ type: [OpeningHourDto], required: false })
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => OpeningHourDto)
+    openingHours?: OpeningHourDto[];
+  
+    @ApiProperty({ type: [MenuItemDto], required: false })
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => MenuItemDto)
+    menu?: MenuItemDto[];
+  }
+  

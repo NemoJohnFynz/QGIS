@@ -446,6 +446,118 @@ export class AuthService {
         return await user.save();
       }
 
+      async getuserByName(name: string, userId: string): Promise<any[]> {
+        try {
+    
+          const users = await this.UserModel.find({
+            $or: [
+              { firstName: { $regex: name, $options: 'i' } },
+              { lastName: { $regex: name, $options: 'i' } }
+            ]
+          })
+            .select('-password -isActive -refreshToken -createdAt -updatedAt -role -otp -otpExpirationTime -bookmarks -friends -coverImage')
+            .lean()
+            .exec();
+    
+    
+          const friendRequests = await this.FriendRequestModel.find({
+            $or: [
+              { sender: userId },
+              { receiver: userId },
+            ],
+          }).exec();
+    
+    
+          const friends = await this.FriendModel.find({
+            $or: [{ sender: userId }, { receiver: userId }],
+          }).exec();
+    
+          // Process user data and assign friend statuses
+          const updatedUsers = users.map((user) => {
+            let status = 'no friend';
+    
+    
+            if (friends.some((friend) =>
+              (friend.sender.toString() === userId && friend.receiver.toString() === user._id.toString()) ||
+              (friend.sender.toString() === user._id.toString() && friend.receiver.toString() === userId)
+            )) {
+              status = 'friend';
+            } else {
+              // Check for pending requests (sent or received)
+              const pendingRequest = friendRequests.find(
+                (request) =>
+                  (request.sender.toString() === userId && request.receiver.toString() === user._id.toString() && request.status === 'waiting') ||
+                  (request.receiver.toString() === userId && request.sender.toString() === user._id.toString() && request.status === 'waiting')
+              );
+    
+              if (pendingRequest) {
+                status = pendingRequest.sender.toString() === userId ? 'waiting' : 'pending'; // Differentiate sent/received
+              }
+            }
+    
+            return { ...user, status };
+          });
+    
+          return updatedUsers;
+        } catch (error) {
+    
+          throw new HttpException('Could not retrieve users', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
+
+      async getUserByNumberPhone(numberPhone: string, userId: string): Promise<any[]> {
+        try {
+          const users = await this.UserModel.find({
+            numberPhone: { $regex: numberPhone, $options: 'i' },
+            _id: { $ne: userId }, // Loại trừ chính mình khỏi danh sách
+          })
+            .select('-password -refreshToken -createdAt -updatedAt -otp -otpExpirationTime -bookmarks -friends -coverImage -role')
+            .lean()
+            .exec();
+      
+          const friendRequests = await this.FriendRequestModel.find({
+            $or: [
+              { sender: userId },
+              { receiver: userId },
+            ],
+          }).exec();
+      
+          const friends = await this.FriendModel.find({
+            $or: [{ sender: userId }, { receiver: userId }],
+          }).exec();
+      
+          const updatedUsers = users.map((user) => {
+            let status = 'no friend';
+      
+            const isFriend = friends.some((friend) =>
+              (friend.sender.toString() === userId && friend.receiver.toString() === user._id.toString()) ||
+              (friend.receiver.toString() === userId && friend.sender.toString() === user._id.toString())
+            );
+      
+            if (isFriend) {
+              status = 'friend';
+            } else {
+              const pendingRequest = friendRequests.find(
+                (request) =>
+                  (request.sender.toString() === userId && request.receiver.toString() === user._id.toString() && request.status === 'waiting') ||
+                  (request.receiver.toString() === userId && request.sender.toString() === user._id.toString() && request.status === 'waiting')
+              );
+      
+              if (pendingRequest) {
+                status = pendingRequest.sender.toString() === userId ? 'waiting' : 'pending';
+              }
+            }
+      
+            return { ...user, status };
+          });
+      
+          return updatedUsers;
+        } catch (error) {
+          throw new HttpException('Could not retrieve users by phone number', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
+      
+
     
 
 }
