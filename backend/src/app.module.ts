@@ -10,6 +10,7 @@ import { CategoryModule } from './category/category.module';
 
 import { LocationModule } from 'src/location/location.module';
 import { MapModule } from './map/map.module';
+import { ChatModule } from './chat/chat.module';
 @Global()
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { MapModule } from './map/map.module';
     EventModule,
     LocationModule,
     MapModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
