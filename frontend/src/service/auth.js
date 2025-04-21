@@ -1,6 +1,6 @@
 import axios from "axios";
 import api from "./apiSetup.js";
-import authToken from "../storage/authToken";
+
 async function register(formData) {
   try {
     const response = await axios.post(
