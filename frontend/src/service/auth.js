@@ -1,5 +1,6 @@
 import axios from "axios";
 import api from "./apiSetup.js";
+
 async function register(formData) {
   try {
     const response = await axios.post(
@@ -35,4 +36,14 @@ const current = async () => {
     console.error("Error get user:", error);
   }
 };
-export { register, login, current };
+
+async function update(formData) {
+  try {
+    const response = await api.put(`/auth/update`, formData); // Pass formData as the second argument
+    return response.data;
+  } catch (error) {
+    console.error("Error during registration:", error);
+    throw error;
+  }
+}
+export { register, login, current, update };
