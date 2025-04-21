@@ -8,4 +8,17 @@ const createLocation = async (data) => {
     console.error("Error get user:", error);
   }
 };
-export { createLocation };
+const uploadImageToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("files", file);
+
+  const response = await api.post("/cloudinary/img", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+};
+
+export { createLocation, uploadImageToCloudinary };
