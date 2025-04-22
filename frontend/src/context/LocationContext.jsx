@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { getLocations } from "../service/location";
 const LocationContext = createContext();
 
 export const LocationProvider = ({ children }) => {
@@ -6,6 +7,19 @@ export const LocationProvider = ({ children }) => {
   const [locationError, setLocationError] = useState(null);
   const [locationSelect, setLocationSelect] = useState(null);
   const [chaneLocation, setChaneLocation] = useState(null);
+  const [routeTarget, setRouteTarget] = useState(null);
+  const [stores, setStores] = useState([]);
+  const fetchData = async () => {
+    try {
+      const res = await getLocations();
+      setStores(res.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -30,7 +44,12 @@ export const LocationProvider = ({ children }) => {
         chaneLocation,
         setChaneLocation,
         locationSelect,
-        setLocationSelect,  
+        setLocationSelect,
+        routeTarget,
+        setRouteTarget,
+        stores,
+        setStores,
+        fetchData,
       }}
     >
       {children}
