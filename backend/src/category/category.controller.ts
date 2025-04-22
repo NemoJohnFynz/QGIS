@@ -69,8 +69,7 @@ import {
     @Get('getAllCategory')
     @ApiOperation({ summary: 'Lấy tất cả danh mục ' })
     @ApiResponse({ status: 200, description: 'Lấy thành công danh sách danh mục.' })
-    async getAllCategory(@CurrentUser() currentUser: User) {
-      if (!currentUser) throw new HttpException('Unauthorized user', HttpStatus.UNAUTHORIZED);
+    async getAllCategory() {
       return await this.categoryService.getallCategory();
     }
   
@@ -81,9 +80,7 @@ import {
     @ApiParam({ name: 'id', description: 'ID của danh mục cần lấy' })
     async getCategoryById(
       @Param('id') id: string,
-      @CurrentUser() currentUser: User,
     ) {
-      if (!currentUser) throw new HttpException('Unauthorized user', HttpStatus.UNAUTHORIZED);
       return await this.categoryService.getCategoryById(id);
     }
   
@@ -93,10 +90,8 @@ import {
     @ApiResponse({ status: 404, description: 'Không tìm thấy danh mục.' })
     @ApiParam({ name: 'name', description: 'Tên của danh mục cần tìm' })
     async getCategoryByName(
-      @Param('name') name: string,
-      @CurrentUser() currentUser: User,
+      @Param('name') name: string
     ) {
-      if (!currentUser) throw new HttpException('Unauthorized user', HttpStatus.UNAUTHORIZED);
       return await this.categoryService.getCategoryByName(name);
     }
   }

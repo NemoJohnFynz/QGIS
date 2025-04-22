@@ -55,30 +55,21 @@ import { CreateReviewDto } from './dto/createReview.dto';
     }
 
     @Get('getLocationById/:id')
-    @UseGuards(AuthGuardD)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Lấy thông tin địa điểm theo ID' })
     async getLocationById(
-    @CurrentUser() currentUser: User,
     @Param('id') id: string,
     ) {
-        if (!currentUser) {
-            throw new HttpException('User not found or not authenticated', HttpStatus.UNAUTHORIZED);
-        }
+        
         return this.locationService.getLocationById(id);
     }
 
     @Get('getLocationByName/:name')
-    @UseGuards(AuthGuardD)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Lấy thông tin địa điểm theo tên' })
     async getLocationByName(
-    @CurrentUser() currentUser: User,
     @Param('name') name: string,
     ) {
-        if (!currentUser) {
-            throw new HttpException('User not found or not authenticated', HttpStatus.UNAUTHORIZED);
-        }
         return this.locationService.getLcocationByName(name);
     }
 
@@ -115,7 +106,6 @@ import { CreateReviewDto } from './dto/createReview.dto';
     }
 
     @Get('getReviewByLocationId/:locationId')
-    @UseGuards(AuthGuardD)
     @ApiOperation({ summary: 'Lấy tất cả đánh giá theo ID địa điểm' })
     @ApiResponse({ status: 200, description: 'Lấy tất cả đánh giá thành công', type: [Review] })
     getAllReviewsByLocationId(
