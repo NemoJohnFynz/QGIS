@@ -122,7 +122,7 @@ export const Map = () => {
                     <button
                       className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 text-left font-medium py-1 px-2 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
                       onClick={() => {
-                        console.log("Xem thông tin khu vực:", chaneLocation);
+                        toggleModel('detaillocation') 
                       }}
                     >
                       <Search /> {/* MUI Icon for search */}

@@ -95,7 +95,7 @@ const LocationModal = () => {
     const reviewToSubmit = {
       user: userData?._id,
       location: storeData?._id,
-      rating: newReview.rating,
+      rating: parseInt(newReview.rating),
       comment: newReview.comment,
     };
 
