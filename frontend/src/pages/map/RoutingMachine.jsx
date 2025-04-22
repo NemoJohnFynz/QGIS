@@ -4,12 +4,14 @@ import L from "leaflet";
 import "leaflet-routing-machine";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import MapIcon from "../../img/map.png"; // Đảm bảo ảnh được import đúng
+import { useLocation } from "../../context/LocationContext";
+import { NineKOutlined } from "@mui/icons-material";
 
 const RoutingMachine = ({ start, end }) => {
   const map = useMap();
   const routingControlRef = useRef();
   const [isDragging, setIsDragging] = useState(false);
-
+  const { routeTarget, setRouteTarget } = useLocation();
   useEffect(() => {
     if (!start || !end || routingControlRef.current) return;
 
@@ -29,7 +31,7 @@ const RoutingMachine = ({ start, end }) => {
         styles: [{ color: "black", opacity: 0.15, weight: 9 }],
       },
       lineOptions: {
-        styles: [{ color: "#2563eb", weight: 4, opacity: 1 }], // 💡 Đổi màu ở đây
+        styles: [{ color: "#2563eb", weight: 4, opacity: 1 }],
       },
       collapsible: true,
       addWaypoints: true,
@@ -40,8 +42,16 @@ const RoutingMachine = ({ start, end }) => {
         });
       },
     }).addTo(map);
-
     const container = routingControl.getContainer();
+    if (container) {
+      const button = L.DomUtil.create("button", "leaflet-routing-button");
+      button.innerHTML = "Thoát";
+      L.DomUtil.addClass(button, "leaflet-bar");
+      container.appendChild(button);
+      button.onclick = () => {
+        setRouteTarget(null);
+      };
+    }
     if (container) {
       L.DomUtil.addClass(container, "leaflet-routing-drag");
       const draggable = new L.Draggable(container);

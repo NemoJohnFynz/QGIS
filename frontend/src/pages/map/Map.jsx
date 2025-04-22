@@ -1,21 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MapContainer, Marker, TileLayer, Popup, useMap } from "react-leaflet";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
-import icon from "../../img/location.png";
 import { useLocation } from "../../context/LocationContext";
 import createCustomIcon from "./CreateCustomIcon";
 import LocationSetter from "./LocationSetter";
 import { useMenu } from "../../context/MenuContext";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Modal from "@mui/material/Modal";
+import { Directions, Storefront, Search } from "@mui/icons-material";
 import RoutingMachine from "./RoutingMachine";
-
+import StoreMap from "./StoreMap";
+import { useAuth } from "../../context/AuthContext";
 export const Map = () => {
   const { toggleModel } = useMenu();
   const {
@@ -25,8 +20,11 @@ export const Map = () => {
     chaneLocation,
     setLocationSelect,
     locationSelect,
+    routeTarget,
+    setRouteTarget,
   } = useLocation();
-  const [routeTarget, setRouteTarget] = useState(null);
+  const { userData } = useAuth();
+
   const selectedMarkerRef = useRef(null);
 
   const myLocationIcon = useMemo(() => createCustomIcon("Ô NÔ"), []);
@@ -70,40 +68,53 @@ export const Map = () => {
 
           {/* Marker người dùng chọn */}
           {chaneLocation && (
-            <Marker position={chaneLocation} icon={createCustomIcon("")}>
-              <Popup>
-                <div className="space-y-2 text-sm">
-                  <div className="font-semibold">Vị trí đã chọn</div>
-                  <div className="flex flex-col space-y-2">
+            <Marker position={chaneLocation} icon={selectedLocationIcon}>
+              <Popup className="popup-container">
+                <div className="space-y-3 text-sm">
+                  <div className="font-semibold text-lg text-gray-800">
+                    Vị trí đã chọn
+                  </div>
+                  <div className="flex flex-col space-y-3">
+                    {/* Directions Button */}
                     <button
-                      className="text-blue-600 hover:underline text-left"
+                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-left font-medium py-1 px-2 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
                       onClick={() => {
                         setRouteTarget(chaneLocation);
                       }}
                     >
-                      📍 Chỉ đường đến đây
+                      <Directions /> {/* MUI Icon for directions */}
+                      <span>Chỉ đường đến đây</span>
                     </button>
+
+                    {/* Create Store Button (Only for Users with Role) */}
+                    {userData && userData.role && (
+                      <button
+                        className="flex items-center space-x-2 text-green-600 hover:text-green-800 text-left font-medium py-1 px-2 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
+                        onClick={() => {
+                          toggleModel("createlocation");
+                        }}
+                      >
+                        <Storefront /> {/* MUI Icon for store */}
+                        <span>Tạo cửa hàng tại đây</span>
+                      </button>
+                    )}
+
+                    {/* Area Information Button */}
                     <button
-                      className="text-green-600 hover:underline text-left"
-                      onClick={() => {
-                        toggleModel("createlocation");
-                      }}
-                    >
-                      🏪 Tạo cửa hàng tại đây
-                    </button>
-                    <button
-                      className="text-gray-600 hover:underline text-left"
+                      className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 text-left font-medium py-1 px-2 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
                       onClick={() => {
                         console.log("Xem thông tin khu vực:", chaneLocation);
                       }}
                     >
-                      🔍 Xem thông tin khu vực
+                      <Search /> {/* MUI Icon for search */}
+                      <span>Xem thông tin khu vực</span>
                     </button>
                   </div>
                 </div>
               </Popup>
             </Marker>
           )}
+          <StoreMap />
           <LocationSetter />
           {routeTarget && (
             <RoutingMachine start={myLocation} end={routeTarget} />
