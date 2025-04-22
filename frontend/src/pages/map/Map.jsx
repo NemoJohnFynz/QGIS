@@ -28,7 +28,7 @@ export const Map = () => {
   const selectedMarkerRef = useRef(null);
   const mapRef = useRef(null); // Thêm ref cho MapContainer
 
-  const myLocationIcon = useMemo(() => createCustomIcon("Ô NÔ"), []);
+  const myLocationIcon = useMemo(() => createCustomIcon("Bạn"), []);
   const selectedLocationIcon = useMemo(
     () => createCustomIcon("Đã chọn"),
     [chaneLocation]

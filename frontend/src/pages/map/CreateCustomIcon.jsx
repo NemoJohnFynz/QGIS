@@ -11,7 +11,6 @@ const createCustomIcon = (name) => {
         <h1 style="margin-top: 4px; font-size: 10px; text-transform: uppercase;  background: transparent;  border-radius: 4px;">
         <strong> ${name}</strong>
         </h1>
-
       </div>
     `,
     iconSize: [40, 60],
