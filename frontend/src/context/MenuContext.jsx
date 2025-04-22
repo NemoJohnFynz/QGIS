@@ -13,7 +13,6 @@ export const MenuProvider = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false); // NEW: state để bật/tắt menu list
   const [idStore, setIdStore] = useState(null); // NEW: state để bật/tắt menu list
   const [idMess, setIdMess] = useState(null); // NEW: state để bật/tắt menu list
-
   const toggleModel = (modelName) => {
     setOpenModel((prev) => (prev === modelName ? null : modelName));
   };
@@ -32,6 +31,8 @@ export const MenuProvider = ({ children }) => {
         setShowMenu,
         idStore,
         setIdStore,
+        idMess,
+        setIdMess,
       }}
     >
       {children}

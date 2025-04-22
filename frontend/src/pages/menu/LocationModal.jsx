@@ -4,7 +4,7 @@ import { useMenu } from "../../context/MenuContext";
 import { getLocationById } from "../../service/location";
 import { getWeatherByCoordinates } from "../../service/weather";
 import { useAuth } from "../../context/AuthContext";
-import { ButtonBase } from "@mui/material";
+import { Avatar, ButtonBase } from "@mui/material";
 import { Directions } from "@mui/icons-material";
 import { useLocation } from "../../context/LocationContext";
 import { commentStore, getCommentStore } from "../../service/location";
@@ -161,20 +161,26 @@ const LocationModal = () => {
               reviews.map((review, index) => (
                 <div
                   key={index}
-                  className="border border-gray-200 p-3 rounded-md shadow-sm bg-white"
+                  className="border  relative border-gray-200 p-1 rounded-md shadow-sm bg-white"
                 >
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="font-medium text-gray-800">
-                      {review.user.name}
-                    </p>
-                    <p className="text-yellow-500 text-sm">
-                      {"⭐".repeat(review.rating)}{" "}
-                      <span className="text-gray-500 ml-1">
-                        ({review.rating}/5)
-                      </span>
-                    </p>
+                  <div className="flex items-center justify-between mb-1  p-3 pb-0">
+                    <div className="flex flex-col">
+                      <div className="flex flex-row items-center gap-2">
+                        <Avatar className="w-12 h-12" alt="" />
+                        <p className="font-medium text-gray-800">
+                          {review?.user?.firstName + review?.user?.lastName}
+                        </p>
+                      </div>
+                      <p className="text-yellow-500 text-sm absolute top-1 right-1">
+                        {" "}
+                        <span className="text-gray-300 text-xs">
+                          ({review.rating}/5)
+                        </span>
+                        {"⭐".repeat(review.rating)}{" "}
+                      </p>{" "}
+                      <p className="text-gray-700 text-sm">{review.comment}</p>
+                    </div>
                   </div>
-                  <p className="text-gray-700 text-sm">{review.comment}</p>
                 </div>
               ))
             ) : (
@@ -269,6 +275,7 @@ const LocationModal = () => {
             storeData?.location?.coordinates[1],
             storeData?.location?.coordinates[0],
           ]);
+          toggleModel("");
         }}
       >
         <Directions /> {/* MUI Icon for directions */}
