@@ -94,5 +94,18 @@ import {
     ) {
       return await this.categoryService.getCategoryByName(name);
     }
+
+    @Get('getLocationByCategory/:categoryId')
+    @ApiOperation({ summary: 'Lấy danh sách địa điểm theo danh mục' })
+    @ApiResponse({ status: 200, description: 'Lấy thành công danh sách địa điểm.' })
+    @ApiResponse({ status: 404, description: 'Không tìm thấy danh mục.' })
+    @ApiParam({ name: 'categoryId', description: 'ID của danh mục cần lấy địa điểm' })
+    async getLocationByCategory(
+      @Param('categoryId') categoryId: string,
+    ) {
+      return await this.categoryService.getLocationByCategory(categoryId);
+    }
+
+
   }
   
