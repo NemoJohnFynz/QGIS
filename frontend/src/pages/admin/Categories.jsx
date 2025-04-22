@@ -125,7 +125,7 @@ export default function Categories() {
                         <Suspense fallback={
                             <tbody>
                                 <tr>
-                                    <td colSpan="8" className="text-center py-10">
+                                    <td colSpan="8" className="text-center px-4 py-10">
                                         <Loading />
                                     </td>
                                 </tr>
