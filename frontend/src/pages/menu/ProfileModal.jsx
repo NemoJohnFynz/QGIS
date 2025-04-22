@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { ModeEdit, Save, Cancel } from "@mui/icons-material";
-import { update } from "../../service/auth";
+import { update, current } from "../../service/auth";
 import { toast } from "react-toastify";
 const ProfileModal = () => {
   const [tab, setTab] = React.useState(false);
@@ -13,7 +13,7 @@ const ProfileModal = () => {
     address: "",
     gender: "",
   });
-  const { userData } = useAuth();
+  const { userData, setUserData } = useAuth();
   const [error, setError] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -31,7 +31,7 @@ const ProfileModal = () => {
         gender: userData.gender !== undefined ? userData.gender.toString() : "",
       });
     }
-  }, [userData]);
+  }, [userData, update]);
 
   const validateForm = () => {
     const validationErrors = {};
@@ -100,6 +100,12 @@ const ProfileModal = () => {
           console.log("Cập nhật thành công:");
           setSuccess(true);
           toast.success('Cập nhật thành công');
+
+          // Update the user data in the context
+          const updatedUserData = await current();
+          if (updatedUserData && updatedUserData.status === 200) {
+            setUserData(updatedUserData.data);
+          }
         }
       } catch (error) {
         console.error("Error during profile update:", error);
