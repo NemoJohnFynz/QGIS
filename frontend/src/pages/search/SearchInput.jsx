@@ -202,7 +202,7 @@ const SearchInput = ({ value, onChange, placeholder }) => {
                         },
                       }}
                     >
-                      Login
+                      đăng nhập
                     </Button>
                   )}
                 </IconButton>

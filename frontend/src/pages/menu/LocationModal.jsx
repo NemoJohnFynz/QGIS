@@ -10,6 +10,7 @@ import { useLocation } from "../../context/LocationContext";
 import { commentStore, getCommentStore } from "../../service/location";
 import UpdateLocationModal from "./UpdateLocationModal";
 import { toast } from "react-toastify";
+import { getCategoryByid } from "../../service/category";
 const tabList = [
   { key: "overview", label: "Tổng quan" },
   { key: "reviews", label: "Đánh giá" },
@@ -21,6 +22,9 @@ const LocationModal = () => {
   const { toggleModel, idStore, locationShare, setLocationShare } = useMenu();
   const [activeTab, setActiveTab] = useState("overview");
   const [storeData, setStoreData] = useState(null);
+  const [idCate, setIdCate] = useState(null);
+  const [categoryNames, setCategoryNames] = useState();
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [weather, setWeather] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -32,6 +36,18 @@ const LocationModal = () => {
     comment: "",
   });
   const { setRouteTarget } = useLocation();
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await getCategoryByid(storeData?.categories);
+        setCategoryNames(res.data.name);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh mục:", error);
+      }
+    };
+
+    fetchCategories();
+  }, [storeData]);
 
   useEffect(() => {
     const fetchStore = async () => {
@@ -62,7 +78,6 @@ const LocationModal = () => {
     };
     fetchWeather();
   }, [storeData]);
-
   useEffect(() => {
     const fetchReviews = async () => {
       if (!idStore) return;
@@ -125,7 +140,7 @@ const LocationModal = () => {
               <strong>Địa chỉ:</strong> {storeData.address}
             </p>
             <p>
-              <strong>Danh mục:</strong> {storeData.categories}
+              <strong>Danh mục:</strong> {categoryNames}
             </p>
             <p>
               <strong>Liên hệ:</strong> {storeData.contact?.phone}

@@ -19,5 +19,13 @@ const getCategory = async () => {
     console.error("Error get user:", error);
   }
 };
-
-export { createCategory, getCategory };
+const getCategoryByid = async (id) => {
+  try {
+    const response = await api.get(`/category/getCategoryById/${id}`);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error get user:", error);
+  }
+};
+export { createCategory, getCategory ,getCategoryByid};

@@ -11,10 +11,10 @@ import { useMenu } from "../../context/MenuContext";
 import authToken from "../../storage/authToken";
 
 const menuItems = [
-  { icon: <Chat />, label: "Chat", key: "chat" },
-  { icon: <Person />, label: "Profile", key: "profile" },
-  { icon: <Group />, label: "Friend", key: "friend" },
-  { icon: <LogoutIcon />, label: "Logout", key: "logout" },
+  { icon: <Chat />, label: "Trò chuyện", key: "chat" },
+  { icon: <Person />, label: "Bản thân", key: "profile" },
+  { icon: <Group />, label: "Bạn bè", key: "friend" },
+  { icon: <LogoutIcon />, label: "Đăng xuất", key: "logout" },
 ];
 
 const FloatingMenu = () => {
