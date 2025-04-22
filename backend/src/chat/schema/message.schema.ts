@@ -27,6 +27,9 @@ export class Message extends Document{
   content: string;
 
   @Prop()
+  location: string;
+
+  @Prop()
   mediaURL: string[];
   
   @Prop({enum: ['sent', 'received', 'seen'], default: 'sent'})

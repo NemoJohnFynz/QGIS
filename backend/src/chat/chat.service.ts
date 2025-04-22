@@ -22,20 +22,23 @@ export class ChatService {
     ){}
 
     private encryptMessage(text: string): string {
-        const IV_LENGTH = parseInt(process.env.IV_LENGTH);
-        const iv = crypto.randomBytes(IV_LENGTH); 
-        const cipher = crypto.createCipheriv(
-          process.env.ENCRYPTION_ALGORITHM, 
-          Buffer.from(process.env.ENCRYPTION_KEY, 'utf-8'), 
-          iv
-        );
-        let encrypted = cipher.update(text, 'utf8', 'hex');
-        encrypted += cipher.final('hex');
-      
-        return iv.toString('hex') + ':' + encrypted; 
+      if (!text || typeof text !== "string") {
+        throw new Error("Text to encrypt must be a non-empty string");
       }
+    
+      const IV_LENGTH = parseInt(process.env.IV_LENGTH);
+      const iv = crypto.randomBytes(IV_LENGTH);
+      const cipher = crypto.createCipheriv(
+        process.env.ENCRYPTION_ALGORITHM,
+        Buffer.from(process.env.ENCRYPTION_KEY, "utf-8"),
+        iv
+      );
+      let encrypted = cipher.update(text, "utf8", "hex");
+      encrypted += cipher.final("hex");
+    
+      return iv.toString("hex") + ":" + encrypted;
+    }
       
-  
       private decryptMessage(text: string): string {
         const [iv, encrypted] = text.split(':');
       
@@ -70,14 +73,13 @@ export class ChatService {
           return await group.save();
       }
   
-  
       async sendMessageToGroup(
         sendMessageDto: SendMessageDto, 
         userId: Types.ObjectId, 
         groupId: Types.ObjectId, 
         files?: Express.Multer.File[]
       ): Promise<GroupMessage> {
-        const { content, mediaURL } = sendMessageDto;
+        const { content, location } = sendMessageDto;
       
         const encryptedContent = this.encryptMessage(content);
   
@@ -86,6 +88,7 @@ export class ChatService {
           group: swagerGroupId,
           sender: userId,
           content : encryptedContent,
+          location: sendMessageDto.location,
           reading: [],
         });
       
@@ -336,42 +339,58 @@ export class ChatService {
   
       async sendMesageToUser(
         senderId: Types.ObjectId,
-        receiverId: Types.ObjectId, 
+        receiverId: Types.ObjectId,
         sendMessageDto: SendMessageDto,
         files?: Express.Multer.File[]
       ): Promise<Message> {
-        const { content } = sendMessageDto;
-        const user = await this.UserModel.findById(receiverId);
-        
-        // Ensure the receiver exists
-        if (!user) {
-          throw new HttpException('Receiver not found', HttpStatus.NOT_FOUND);
+        const { content, location } = sendMessageDto;
+      
+        // Kiểm tra xem có ít nhất một trường hoặc file được cung cấp
+        if (!content && !location && (!files || files.length === 0)) {
+          throw new HttpException(
+            "At least one of content, location, or media files must be provided",
+            HttpStatus.BAD_REQUEST
+          );
         }
-        const encryptedContent = this.encryptMessage(content);
+      
+        // Kiểm tra receiver
+        const user = await this.UserModel.findById(receiverId);
+        if (!user) {
+          throw new HttpException("Receiver not found", HttpStatus.NOT_FOUND);
+        }
+      
+        // Mã hóa content nếu có
+        let encryptedContent: string | null = null;
+        if (content) {
+          encryptedContent = this.encryptMessage(content);
+        }
+      
+        // Tạo message
         const Message = new this.MessageModel({
           sender: senderId,
           receiver: receiverId,
-          content:encryptedContent,
+          content: encryptedContent,
+          location: location || null,
         });
       
-        // Upload files if provided
+        // Upload files nếu có
         if (files && files.length > 0) {
           try {
-            const uploadedMedia = await Promise.all(files.map(file => this.cloudinaryService.uploadFile(file)));
-            Message.mediaURL = uploadedMedia;  
+            const uploadedMedia = await Promise.all(
+              files.map(file => this.cloudinaryService.uploadFile(file))
+            );
+            Message.mediaURL = uploadedMedia;
           } catch (error) {
-  
-            throw new HttpException('Failed to upload images', HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new HttpException("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
           }
         }
-        if (Types.ObjectId.isValid(receiverId)) {
-          const receiverObjectId = new Types.ObjectId(receiverId); 
-  
-        } else {
-  
+      
+        // Kiểm tra receiverId (có thể bỏ đoạn này nếu không cần thiết)
+        if (!Types.ObjectId.isValid(receiverId)) {
+          throw new HttpException("Invalid receiver ID", HttpStatus.BAD_REQUEST);
         }
       
-        // Save and return the message
+        // Lưu và trả về message
         return await Message.save();
       }
   

@@ -21,6 +21,9 @@ export class GroupMessage extends Document {
   @Prop()
   content: string;
 
+  @Prop()
+  location: string;
+
   @Prop() 
   mediaURL: string[];
 
