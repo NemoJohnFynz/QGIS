@@ -16,6 +16,7 @@ import {
   DialogActions,
   Tabs,
   Tab,
+  ButtonBase,
 } from "@mui/material";
 import { X, Users, UserPlus, UserX2 } from "lucide-react";
 import { useMenu } from "../../context/MenuContext";
@@ -226,9 +227,24 @@ const FriendModel = () => {
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab label="Bạn bè" icon={<Users size={16} />} />
-          <Tab label="Thêm bạn" icon={<UserPlus size={16} />} />
-          <Tab label="Yêu cầu" icon={<UserX2 size={16} />} />
+          <Tab
+            label="Bạn bè "
+            className="w-1/3"
+            style={{ fontSize: "10px" }}
+            icon={<Users size={14} />}
+          />
+          <Tab
+            label="Thêm bạn"
+            className="w-1/3"
+            style={{ fontSize: "10px" }}
+            icon={<UserPlus size={14} />}
+          />
+          <Tab
+            label="Yêu cầu"
+            className="w-1/3"
+            style={{ fontSize: "10px" }}
+            icon={<UserX2 size={14} />}
+          />
         </Tabs>
 
         {/* Search Input */}
@@ -252,7 +268,14 @@ const FriendModel = () => {
         )}
 
         {/* Content */}
-        <Box sx={{ maxHeight: "60vh", overflowY: "auto", p: 1 }}>
+        <Box
+          sx={{
+            maxHeight: "60vh",
+            overflowY: "auto",
+            p: 1,
+            minHeight: "240px",
+          }}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={currentTab + search}
@@ -264,49 +287,44 @@ const FriendModel = () => {
               {activeList.length > 0 ? (
                 <List>
                   {activeList.map((item) => {
+                    let data = null;
+                    if (item?.receiver?._id) {
+                      data = item?.receiver;
+                    } else if (item?.sender?._id) {
+                      data = item?.sender;
+                    } else {
+                      data = item;
+                    }
                     const fullName =
-                      `${item?.firstName || ""} ${item?.lastName || ""}`.trim() ||
-                      item.name;
+                      `${data?.firstName || ""} ${data?.lastName || ""}`.trim() ||
+                      data?.name;
                     return (
-                      <ListItem
-                        key={item._id + fullName}
-                        sx={{
-                          padding: "8px 12px",
-                          borderRadius: "12px",
-                          marginBottom: "8px",
-                          backgroundColor: "#ffffff",
-                          "&:hover": {
-                            backgroundColor: "#f0f0f0",
-                          },
-                        }}
-                      >
-                        <ListItemAvatar>
-                          <Avatar alt={fullName} src={item.avatar || ""} />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={fullName}
-                          primaryTypographyProps={{
-                            fontWeight: 500,
-                            fontSize: "16px",
-                            color: "#333",
+                      <button className="w-full">
+                        <ListItem
+                          key={item._id + fullName}
+                          sx={{
+                            padding: "8px 12px",
+                            borderRadius: "12px",
+                            marginBottom: "2px",
+                            width: "100%",
+                            backgroundColor: "#ffffff",
+                            "&:hover": {
+                              backgroundColor: "#f0f0f0",
+                            },
                           }}
-                        />
-                        {currentTab === "users" && (
-                          <Button
-                            variant="contained"
-                            size="small"
-                            sx={{
-                              ml: 1,
-                              textTransform: "none",
-                              borderRadius: "8px",
+                        >
+                          <ListItemAvatar>
+                            <Avatar alt={fullName} src={item.avatar || ""} />
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={fullName}
+                            primaryTypographyProps={{
+                              fontWeight: 500,
+                              fontSize: "16px",
+                              color: "#333",
                             }}
-                            onClick={() => handleAddFriend(item._id)}
-                          >
-                            Kết bạn
-                          </Button>
-                        )}
-                        {currentTab === "requests" && (
-                          <Box>
+                          />
+                          {currentTab === "users" && (
                             <Button
                               variant="contained"
                               size="small"
@@ -314,30 +332,47 @@ const FriendModel = () => {
                                 ml: 1,
                                 textTransform: "none",
                                 borderRadius: "8px",
+                                textWrap:'nowrap'
                               }}
-                              onClick={() => handleAcceptFriend(item._id)}
+                              onClick={() => handleAddFriend(item._id)}
                             >
-                              Đồng ý
+                              Kết bạn
                             </Button>
-                            <Button
-                              variant="outlined"
-                              size="small"
-                              color="error"
-                              sx={{
-                                ml: 1,
-                                textTransform: "none",
-                                borderRadius: "8px",
-                              }}
-                              onClick={() => handleRejectFriend(item._id)}
-                            >
-                              Từ chối
-                            </Button>
-                          </Box>
-                        )}
-                        {currentTab === "friends" && (
-                          <Button onClick={() => handleFriendClick(item)} />
-                        )}
-                      </ListItem>
+                          )}
+                          {currentTab === "requests" && (
+                            <Box>
+                              <Button
+                                variant="contained"
+                                size="small"
+                                sx={{
+                                  ml: 1,
+                                  textTransform: "none",
+                                  borderRadius: "8px",
+                                }}
+                                onClick={() => handleAcceptFriend(item._id)}
+                              >
+                                Đồng ý
+                              </Button>
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                color="error"
+                                sx={{
+                                  ml: 1,
+                                  textTransform: "none",
+                                  borderRadius: "8px",
+                                }}
+                                onClick={() => handleRejectFriend(item._id)}
+                              >
+                                Từ chối
+                              </Button>
+                            </Box>
+                          )}
+                          {currentTab === "friends" && (
+                            <Button onClick={() => handleFriendClick(item)} />
+                          )}
+                        </ListItem>
+                      </button>
                     );
                   })}
                 </List>
