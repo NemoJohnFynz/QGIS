@@ -11,7 +11,7 @@ import { commentStore, getCommentStore } from "../../service/location";
 import UpdateLocationModal from "./UpdateLocationModal";
 import { toast } from "react-toastify";
 const tabList = [
-  { key: "overview", label: "Tổng quang" },
+  { key: "overview", label: "Tổng quan" },
   { key: "reviews", label: "Đánh giá" },
   { key: "introduction", label: "Giới thiệu" },
   { key: "weather", label: "Thời tiết" },

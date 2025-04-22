@@ -3,30 +3,15 @@ import { useEffect, useState } from 'react';
 import { deleteCategory, getAllCategory } from '../../service/admin';
 import Loading from '../Loading';
 
-export default function TableCategory({ query }) {
-  const [categories, setCategories] = useState([]);
+export default function TableCategory({ query, newcategories }) {
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
 
+  // Set categories from props when component mounts or newcategories changes
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        // Fixed: Call getAllLocation as a function
-        const response = await getAllCategory();
-        const sortedCategories = response.sort((a, b) =>
-          new Date(b.createdAt) - new Date(a.createdAt) // Sắp xếp giảm dần theo createdAt
-        );
-        if (sortedCategories) {
-          setCategories(sortedCategories);
-        }
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+    setCategories(newcategories);
+    setLoading(false);
+  }, [newcategories]);
 
   //handle delete category
   const handleDeleteCategory = async (id) => {
