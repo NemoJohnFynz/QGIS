@@ -40,10 +40,10 @@ export function RegisterForm() {
       validationErrors.confirmPassword = "Mật khẩu không khớp nhau";
     }
 
-    const phoneRegex = /^[0-9]{11}$/;
-    if (!phoneRegex.test(formData.numberPhone)) {
-      validationErrors.numberPhone = "Số điện thoại không hợp lệ";
-    }
+    // const phoneRegex = /^[0-9]{11}$/;
+    // if (!phoneRegex.test(formData.numberPhone)) {
+    //   validationErrors.numberPhone = "Số điện thoại không hợp lệ";
+    // }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
@@ -88,7 +88,7 @@ export function RegisterForm() {
         setSuccess(true); // Set success state to true
       }
       toast.success('Đăng ký thành công')
-            // setTimeout(() => {
+      // setTimeout(() => {
       //   setForm(""); // Reset success state after 3 seconds
       // }, 3000);
     } catch (error) {

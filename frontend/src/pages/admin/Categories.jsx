@@ -1,19 +1,36 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useEffect } from 'react'
 import TableCategory from '../../components/Admin/TableCategory';
 import Loading from '../../components/Loading';
-import { createCategory } from '../../service/admin';
+import { createCategory, getAllCategory } from '../../service/admin';
 import { toast } from 'react-toastify';
 import SimpleAlert from '../../components/Alert';
+
 
 export default function Categories() {
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [categories, setCategories] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false); // State for modal
     const [formData, setFormData] = useState({
         name: '',
         description: ''
     });
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    const fetchCategories = async () => {
+        try {
+            const data = await getAllCategory();
+            const sortedCategories = data.sort((a, b) =>
+                new Date(b.createdAt) - new Date(a.createdAt) // Sắp xếp giảm dần theo createdAt
+            );
+            setCategories(sortedCategories);
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        }
+    };
     const handleAddCategory = () => {
         setIsModalOpen(true); // Open modal
     };
@@ -31,24 +48,27 @@ export default function Categories() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Set loading state to true
         // Handle form submission logic here
         try {
             const response = await createCategory(formData);
             if (response) {
                 console.log("Create category success:", response);
-                setFormData({ name: '', description: '' }); // Reset form data
-                setSuccess(true); // Set success state to true
+                setFormData({ name: '', description: '' });
+                setSuccess(true);
+                toast.success('Category created successfully');
+
+                // Refresh categories data without page reload
+                fetchCategories();
             }
-            toast.success('Create category success')
-            // setTimeout(() => {
-            //   setForm(""); // Reset success state after 3 seconds
-            // }, 3000);
         } catch (error) {
-            console.error("Error during registration:", error);
+            console.error("Error during category creation:", error);
+            toast.error('Failed to create category');
         } finally {
             setLoading(false);
             setTimeout(() => {
-                setIsModalOpen(false); // Close modal after 3 seconds
+                setIsModalOpen(false);
+                setSuccess(false);
             }, 2000)
         }
     };
@@ -105,13 +125,13 @@ export default function Categories() {
                         <Suspense fallback={
                             <tbody>
                                 <tr>
-                                    <td colSpan="8" className="text-center py-10">
+                                    <td colSpan="8" className="text-center px-4 py-10">
                                         <Loading />
                                     </td>
                                 </tr>
                             </tbody>
                         }>
-                            <TableCategory query={query} />
+                            <TableCategory query={query} newcategories={categories} />
                         </Suspense>
                     </table>
                 </div>

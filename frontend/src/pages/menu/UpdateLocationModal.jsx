@@ -43,7 +43,7 @@ const UpdateLocationModal = ({ open, onClose, locationData }) => {
       });
       setOpeningHours(locationData.openingHours || []);
     }
-  }, [locationData]);
+  }, [locationData, updateLocation]);
 
   const handleInput = (field) => (e) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
@@ -108,17 +108,7 @@ const UpdateLocationModal = ({ open, onClose, locationData }) => {
       form.append("description", formData.description);
       if (formData.address) form.append("address", formData.address);
 
-      // ✅ location là object
-      const locationObject = {
-        type: "Point",
-        coordinates: [
-          locationData.location.coordinates[0],
-          locationData.location.coordinates[1],
-        ],
-      };
 
-      // Sử dụng `formData.append` để thêm đối tượng location
-      form.append("location", locationObject);
 
       // ✅ Chuyển categories string -> array
       const categoryArray = formData.categories
