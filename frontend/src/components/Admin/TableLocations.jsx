@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
-import { getAllLocation } from '../../service/admin';
+import { deleteLocation, getAllLocation } from '../../service/admin';
 import Loading from '../Loading';
 import { Link } from 'react-router-dom';
 
@@ -25,6 +25,22 @@ export default function TableLocations({ query }) {
         };
         fetchData();
     }, []);
+
+
+    //handle delete location
+    const handleDeleteLocation = async (id) => {
+        try {
+            setLoading(true);
+            const response = await deleteLocation(id);
+            if (response) {
+                setLocations(locations.filter(location => location._id !== id));
+            }
+        } catch (error) {
+            console.error("Error deleting location:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -81,6 +97,9 @@ export default function TableLocations({ query }) {
                         </td>
                         <td className="px-4 py-2 ">
                             <Link className='text-blue-500 underline text-nowrap'>{l.contact.website}</Link>
+                        </td>
+                        <td>
+                            <button onClick={(e) => handleDeleteLocation(l._id)} className="text-red-500 px-4 py-2">Delete</button>
                         </td>
                     </tr>
                 ))

@@ -21,4 +21,24 @@ async function getAllLocation() {
     }
 }
 
-export { getAllUser, getAllLocation };
+async function deleteLocation(id) {
+    try {
+        const response = await api.delete(`/location/deleteLocation/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error during registration:", error);
+        throw error;
+    }
+}
+
+async function getAllCategory() {
+    try {
+        const response = await api.get(`/category/getAllCategory`);
+        return response.data;
+    } catch (error) {
+        console.error("Error during registration:", error);
+        throw error;
+    }
+}
+
+export { getAllUser, getAllLocation, deleteLocation,getAllCategory };
