@@ -4,11 +4,14 @@ import { Category } from './schema/category.schema';
 import { Model } from 'mongoose';
 import { CreateCategoryDto } from './dto/createCategory.dto';
 import { UpdateCategoryDto } from './dto/updateCategory.dto';
+import { Location } from 'src/location/schema/location.schema';
+
 
 @Injectable()
 export class CategoryService {
     constructor(
         @InjectModel(Category.name) private CategoryModel: Model<Category>,
+        @InjectModel(Location.name) private LocationModel: Model<Location>,
     ){}
 
 
@@ -55,8 +58,19 @@ export class CategoryService {
         }
         return category;
     }
-    
 
 
-
+    async getLocationByCategory(categoryId: string): Promise<Location[]> {
+        const category = await this.CategoryModel.findById(categoryId).exec();
+        if (!category) {
+          throw new Error('Category not found');
+        }
+      
+        const locations = await this.LocationModel.find({ categories: categoryId }).exec();
+      
+        return locations;
+      }
+      
 }
+
+
