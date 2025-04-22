@@ -14,8 +14,7 @@ export class Friend extends Document {
     receiver: User;
   
     @Prop({ required: true })
-    status: string ;
+    status: string;
 }
 
 export const FriendSchema = SchemaFactory.createForClass(Friend)
-FriendSchema.index({ sender: 1, receiver: 1 }, { unique: true });
