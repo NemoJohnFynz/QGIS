@@ -3,6 +3,7 @@ import {
     Dashboard,
     Person,
     LocationOn,
+    Category,
     Map
 } from "@mui/icons-material";
 import { Link, useLocation } from "react-router-dom";
@@ -30,7 +31,7 @@ export default function SideBar() {
                     to={"categories"}
                     className={` p-4 flex items-center rounded-md ${isActiveTab("/") ? "bg-[#1D1D1D]" : "hover:bg-[#353535]"}`}
                 >
-                    <LocationOn />
+                    <Category />
                     <span className="px-10">Categories</span>
                 </Link>
                 <Link
