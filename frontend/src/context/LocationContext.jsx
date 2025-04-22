@@ -9,6 +9,8 @@ export const LocationProvider = ({ children }) => {
   const [chaneLocation, setChaneLocation] = useState(null);
   const [routeTarget, setRouteTarget] = useState(null);
   const [stores, setStores] = useState([]);
+  const [map, setMap] = useState(null);
+
   const fetchData = async () => {
     try {
       const res = await getLocations();
@@ -33,8 +35,7 @@ export const LocationProvider = ({ children }) => {
     } else {
       setLocationError("Geolocation is not supported by this browser.");
     }
-  }, []);
-
+  }, []); 
   return (
     <LocationContext.Provider
       value={{
@@ -50,6 +51,8 @@ export const LocationProvider = ({ children }) => {
         stores,
         setStores,
         fetchData,
+        map,
+        setMap,
       }}
     >
       {children}

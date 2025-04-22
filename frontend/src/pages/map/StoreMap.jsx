@@ -5,11 +5,14 @@ import L from "leaflet";
 import { ClickAwayListener } from "@mui/material";
 import { useMenu } from "../../context/MenuContext";
 import { useLocation } from "../../context/LocationContext";
-
+import imgPoint from '../../img/icons8-location(1).gif'
 const StoreMap = () => {
   const { toggleModel, setIdStore } = useMenu();
   const { stores, setStores, fetchData } = useLocation();
-
+  const [fetchStore, setFetchStore] = useState(null);
+  useEffect(() => {
+    setFetchStore(stores);
+  }, [stores]);
   // Tạo custom icon với mũi nhọn dưới ảnh
   const createCustomIcon = (imageUrl) => {
     return new L.DivIcon({
@@ -24,11 +27,14 @@ const StoreMap = () => {
       popupAnchor: [0, -60], // Điều chỉnh cho popup
     });
   };
-
-  return stores.map((store) => {
+  if (!fetchStore) {
+    return;
+  }
+  return fetchStore.map((store) => {
     const storeIcon = createCustomIcon(
-      store?.images[0] || "/path/to/default/image.jpg"
+      store?.images?.[0] || imgPoint
     );
+    
 
     return (
       <Marker

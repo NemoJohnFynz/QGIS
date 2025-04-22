@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { MapContainer, Marker, TileLayer, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
@@ -11,26 +11,36 @@ import { Directions, Storefront, Search } from "@mui/icons-material";
 import RoutingMachine from "./RoutingMachine";
 import StoreMap from "./StoreMap";
 import { useAuth } from "../../context/AuthContext";
+
 export const Map = () => {
   const { toggleModel } = useMenu();
   const {
     myLocation,
-    setMyLocation,
     locationError,
     chaneLocation,
-    setLocationSelect,
-    locationSelect,
     routeTarget,
     setRouteTarget,
+    map,
+    setMap,
   } = useLocation();
   const { userData } = useAuth();
 
   const selectedMarkerRef = useRef(null);
+  const mapRef = useRef(null); // Thêm ref cho MapContainer
 
   const myLocationIcon = useMemo(() => createCustomIcon("Ô NÔ"), []);
   const selectedLocationIcon = useMemo(
     () => createCustomIcon("Đã chọn"),
     [chaneLocation]
+  );
+
+  // Sử dụng useCallback để tạo hàm ổn định cho whenCreated
+  const handleMapCreated = useCallback(
+    (mapInstance) => {
+      setMap(mapInstance);
+      mapRef.current = mapInstance; // Lưu trữ instance vào ref nếu cần
+    },
+    [setMap]
   );
 
   useEffect(() => {
@@ -43,6 +53,12 @@ export const Map = () => {
       });
     }
   }, [chaneLocation]);
+  // Trong component Map
+  useEffect(() => {
+    if (mapRef.current) {
+      setMap(mapRef.current); 
+    }
+  }, [mapRef.current, setMap]);
 
   if (locationError) {
     return <div>{locationError}</div>;
@@ -56,9 +72,12 @@ export const Map = () => {
     <>
       <div className="w-full h-screen">
         <MapContainer
+          ref={mapRef}
           className="h-full w-full max-w-screen max-h-[100dvh]"
           center={myLocation}
           zoom={13}
+          // Sử dụng whenCreated với hàm handleMapCreated
+          whenCreated={handleMapCreated}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 

@@ -142,7 +142,7 @@ const CreateLocationModal = () => {
       form.append("name", formData.name);
       form.append("description", formData.description);
       form.append("address", formData.address);
-      form.append("categoryId", formData.categories); // Appending selected category ID
+      form.append("categories", formData.categories); // Appending selected category ID
 
       if (formData.phone) form.append("contact", `phone:${formData.phone}`);
       if (formData.website)

@@ -3,9 +3,8 @@ import { useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet-routing-machine";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-import MapIcon from "../../img/map.png"; // Đảm bảo ảnh được import đúng
-import { useLocation } from "../../context/LocationContext";
-import { NineKOutlined } from "@mui/icons-material";
+import MapIcon from "../../img/icons8-location.gif"; // Đảm bảo ảnh được import đúng
+import { useLocation } from "../../context/LocationContext"; 
 
 const RoutingMachine = ({ start, end }) => {
   const map = useMap();
@@ -35,13 +34,18 @@ const RoutingMachine = ({ start, end }) => {
       },
       collapsible: true,
       addWaypoints: true,
-      position: "topleft",
+      position: "bottomleft",
       createMarker: (i, wp, nWps) => {
         return L.marker(wp.latLng, {
           icon: customIcon,
         });
       },
+      router: L.Routing.osrmv1({
+        language: 'vi', // ⚠️ thêm dòng này để cố gắng lấy chỉ dẫn bằng tiếng Việt
+        serviceUrl: 'https://router.project-osrm.org/route/v1'
+      }),
     }).addTo(map);
+    
     const container = routingControl.getContainer();
     if (container) {
       const button = L.DomUtil.create("button", "leaflet-routing-button");
