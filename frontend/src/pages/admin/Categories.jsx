@@ -4,7 +4,7 @@ import Loading from '../../components/Loading';
 import { createCategory, getAllCategory } from '../../service/admin';
 import { toast } from 'react-toastify';
 import SimpleAlert from '../../components/Alert';
-import { useNavigate } from 'react-router-dom';
+
 
 export default function Categories() {
     const [query, setQuery] = useState('');
@@ -31,7 +31,6 @@ export default function Categories() {
             console.error("Error fetching categories:", error);
         }
     };
-    const navigate = useNavigate();
     const handleAddCategory = () => {
         setIsModalOpen(true); // Open modal
     };
