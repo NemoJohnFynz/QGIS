@@ -227,4 +227,23 @@ export class AuthController {
     return this.authService.getUserByNumberPhone(numberPhone, currentUser._id.toString());
   }
 
+  @Get('alluseradmin')
+  @UseGuards(new RolesGuard(true))
+  @UseGuards(AuthGuardD)
+  async getalluserforadmin(
+    @CurrentUser() currentUser: User,
+  ) {
+    try {
+      if (!currentUser) {
+        throw new UnauthorizedException('you dont have permission');
+      }
+      if (currentUser.role.toString() !== 'true') {
+        throw new ForbiddenException('you dont have permission');
+      }
+      return this.authService.findAllUserForAdmin();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 }
