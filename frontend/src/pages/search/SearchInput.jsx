@@ -15,6 +15,7 @@ import { useMenu } from "../../context/MenuContext";
 import { getCategory } from "../../service/category";
 import { useLocation } from "../../context/LocationContext";
 import { useNavigate } from "react-router-dom";
+import { getLocationById } from "../../service/location";
 
 const SearchInput = ({ value, onChange, placeholder }) => {
   const { stores, map } = useLocation();
@@ -28,6 +29,7 @@ const SearchInput = ({ value, onChange, placeholder }) => {
   const [genreSearch, setGenreSearch] = useState("");
   const [genreOptions, setGenreOptions] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [categoryIdMap, setCategoryIdMap] = useState({});
 
   const navigate = useNavigate();
 
@@ -83,17 +85,43 @@ const SearchInput = ({ value, onChange, placeholder }) => {
   const filteredGenres = genreOptions.filter((genre) =>
     genre.toLowerCase().includes(genreSearch.toLowerCase())
   );
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getCategory();
+        if (response?.data) {
+          const genres = response.data.map((item) => item.name);
+          setGenreOptions(["Tất cả", ...genres]);
+
+          // Map category ID to name
+          const idToNameMap = {};
+          response.data.forEach((cat) => {
+            idToNameMap[cat._id] = cat.name;
+          });
+          setCategoryIdMap(idToNameMap); // <- new state
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải danh mục:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const filteredLocations = locations.filter((loc) => {
     const name = loc?.name || "";
-    const category = Array.isArray(loc?.categories)
+    const searchValue = searchResult?.toLowerCase?.() || "";
+
+    const categoryIds = Array.isArray(loc?.categories)
       ? loc.categories
       : [loc?.categories];
-    const searchValue = searchResult?.toLowerCase?.() || "";
+
+    const categoryNames = categoryIds
+      .map((id) => categoryIdMap[id])
+      .filter(Boolean);
 
     const matchesName = name.toLowerCase().includes(searchValue);
     const matchesCategory =
-      selectedGenre === "Tất cả" || category.includes(selectedGenre);
+      selectedGenre === "Tất cả" || categoryNames.includes(selectedGenre);
 
     return matchesName && matchesCategory;
   });
@@ -227,7 +255,7 @@ const SearchInput = ({ value, onChange, placeholder }) => {
                     map &&
                     loc.location?.coordinates[1] &&
                     loc.location?.coordinates[0]
-                  ) { 
+                  ) {
                     map.flyTo(
                       [
                         loc.location?.coordinates[1],
@@ -247,8 +275,11 @@ const SearchInput = ({ value, onChange, placeholder }) => {
                   <div className="text-sm text-gray-500">{loc.address}</div>
                   <div className="text-xs text-gray-400">
                     {Array.isArray(loc.categories)
-                      ? loc.categories.join(", ")
-                      : loc.categories}
+                      ? loc.categories
+                          .map((id) => categoryIdMap[id])
+                          .filter(Boolean)
+                          .join(", ")
+                      : categoryIdMap[loc.categories]}
                   </div>
                 </div>
                 {loc.images && loc.images.length > 0 && (
