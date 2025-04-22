@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { X, Trash2 } from "lucide-react";
 import { useMenu } from "../../context/MenuContext";
-import { Button, TextField, CircularProgress, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import {
+  Button,
+  TextField,
+  CircularProgress,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import { createLocation } from "../../service/location";
 import { useLocation } from "../../context/LocationContext";
 import { toast } from "react-toastify";
-import { createCategory as createCategoryAPI, getCategory as getCategoryAPI } from "../../service/category";
+import {
+  createCategory as createCategoryAPI,
+  getCategory as getCategoryAPI,
+} from "../../service/category";
 
 const weekdays = [
   "thứ 2",
@@ -108,7 +119,10 @@ const CreateLocationModal = () => {
 
     setIsCreatingCategory(true);
     try {
-      const response = await createCategoryAPI(categoryName, categoryDescription);
+      const response = await createCategoryAPI(
+        categoryName,
+        categoryDescription
+      );
       if (response && response.status === 201) {
         toast.success("Tạo danh mục thành công!");
         // Fetch categories again to update the list
@@ -161,7 +175,6 @@ const CreateLocationModal = () => {
           `name:${item.name},price:${item.price},description:${item.description}`
         );
       });
-
       form.append(
         "location",
         JSON.stringify({
@@ -169,12 +182,21 @@ const CreateLocationModal = () => {
           coordinates: [chaneLocation[1], chaneLocation[0]],
         })
       );
-
       imageFiles.forEach((file) => form.append("files", file));
-
-      await createLocation(form);
-      fetchData();
-      toast.success("Tạo cửa hàng thành công!");
+      try {
+        const response = await createLocation(form);
+        if (response.status === 201 || response.status === 200) {
+          fetchData();
+          toast.success("Tạo cửa hàng thành công!");
+        } else {
+          toast.error(`Thất bại với mã lỗi: ${response.status}`);
+        }
+      } catch (error) {
+        const status = error.response?.status || "Không xác định";
+        const message =
+          error.response?.data?.message || "Đã xảy ra lỗi khi tạo cửa hàng.";
+        toast.error(`Lỗi (${status}): ${message}`);
+      }
 
       toggleModel("");
     } catch (error) {
@@ -286,7 +308,11 @@ const CreateLocationModal = () => {
             onClick={handleCreateCategory}
             disabled={isLoading || isCreatingCategory}
           >
-            {isCreatingCategory ? <CircularProgress size={24} /> : "Thêm danh mục"}
+            {isCreatingCategory ? (
+              <CircularProgress size={24} />
+            ) : (
+              "Thêm danh mục"
+            )}
           </Button>
         </div>
 

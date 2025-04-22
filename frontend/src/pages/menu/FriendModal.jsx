@@ -31,9 +31,11 @@ import {
   rejectFriend,
 } from "../../service/friend";
 import { toast } from "react-toastify";
+import { useSocket } from "../../context/SocketContext";
 
 const FriendModel = () => {
-  const { toggleModel } = useMenu();
+  const { socket } = useSocket();
+  const { toggleModel, idMess, setIdMess } = useMenu();
   const [tabIndex, setTabIndex] = useState(0); // 0: Friends, 1: Find Users, 2: Friend Requests
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -103,6 +105,11 @@ const FriendModel = () => {
     try {
       await addFriend(userId);
       toast.success("Đã gửi lời mời kết bạn.");
+      socket.emit("all_send", {
+        id: userId,
+        api: { modal: "friend" },
+      });
+
       // Có thể cập nhật lại danh sách tìm kiếm để ẩn người đã gửi lời mời
     } catch (error) {
       console.error("Lỗi khi gửi lời mời kết bạn:", error);
@@ -112,6 +119,7 @@ const FriendModel = () => {
 
   const handleUnfriend = async (friendId) => {
     try {
+      console.log('unfir')
       await unFriend(friendId);
       toast.success("Đã hủy kết bạn.");
       setFriendList(friendList.filter((friend) => friend._id !== friendId));
@@ -153,7 +161,7 @@ const FriendModel = () => {
   const handleAction = (action) => {
     if (action === "chat") {
       toggleModel("chat");
-    } else if (action === "remove") {
+    } else if (action === "remove") { console.log('unfir')
       if (selectedFriend?._id) {
         handleUnfriend(selectedFriend._id);
       }
@@ -299,7 +307,13 @@ const FriendModel = () => {
                       `${data?.firstName || ""} ${data?.lastName || ""}`.trim() ||
                       data?.name;
                     return (
-                      <button className="w-full">
+                      <button
+                        className="w-full"
+                        onClick={() => {
+                          setOpenDialog(true);
+                          setIdMess(data?._id);
+                        }}
+                      >
                         <ListItem
                           key={item._id + fullName}
                           sx={{
@@ -332,7 +346,7 @@ const FriendModel = () => {
                                 ml: 1,
                                 textTransform: "none",
                                 borderRadius: "8px",
-                                textWrap:'nowrap'
+                                textWrap: "nowrap",
                               }}
                               onClick={() => handleAddFriend(item._id)}
                             >
@@ -409,7 +423,9 @@ const FriendModel = () => {
           <Button
             variant="contained"
             fullWidth
-            onClick={() => handleAction("chat")}
+            onClick={() => {
+              toggleModel("chat");
+            }}
           >
             Nhắn tin
           </Button>

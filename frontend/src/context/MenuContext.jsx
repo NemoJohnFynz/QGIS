@@ -1,15 +1,13 @@
 // context/MenuContext.jsx
 import React, { createContext, useContext, useState } from "react";
 import FloatingMenu from "../pages/Bar/FloatingMenu";
-import ProfileModal from "../pages/menu/ProfileModal";
-import ChatModal from "../pages/menu/ChatModal";
-import FriendModel from "../pages/menu/FriendModal";
 import ModalRegistry from "../components/ModalRegistry";
 
 const MenuContext = createContext();
 
 export const MenuProvider = ({ children }) => {
   const [openModel, setOpenModel] = useState(null);
+  const [locationShare, setLocationShare] = useState(null);
   const [showMenu, setShowMenu] = useState(false); // NEW: state để bật/tắt menu list
   const [idStore, setIdStore] = useState(null); // NEW: state để bật/tắt menu list
   const [idMess, setIdMess] = useState(null); // NEW: state để bật/tắt menu list
@@ -33,6 +31,8 @@ export const MenuProvider = ({ children }) => {
         setIdStore,
         idMess,
         setIdMess,
+        locationShare,
+        setLocationShare,
       }}
     >
       {children}

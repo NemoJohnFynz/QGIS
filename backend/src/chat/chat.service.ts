@@ -38,7 +38,7 @@ export class ChatService {
     
       return iv.toString("hex") + ":" + encrypted;
     }
-      
+
       private decryptMessage(text: string): string {
         const [iv, encrypted] = text.split(':');
       
