@@ -14,49 +14,138 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  Tabs,
+  Tab,
 } from "@mui/material";
-import { X, Users, UserPlus } from "lucide-react";
+import { X, Users, UserPlus, UserX2 } from "lucide-react";
 import { useMenu } from "../../context/MenuContext";
 import { AnimatePresence, motion } from "framer-motion";
-import { getUserByName } from "../../service/friend";
-
-const friends = [
-  { id: 1, name: "John Doe", avatar: "" },
-  { id: 2, name: "Jane Smith", avatar: "" },
-  { id: 3, name: "Alice Johnson", avatar: "" },
-  { id: 4, name: "Bob Brown", avatar: "" },
-];
+import {
+  getUserByName,
+  addFriend,
+  unFriend,
+  getMyFriend,
+  getMyFriendRequest,
+  acceptFriend,
+  rejectFriend,
+} from "../../service/friend";
+import { toast } from "react-toastify";
 
 const FriendModel = () => {
   const { toggleModel } = useMenu();
-  const [tab, setTab] = useState("friends");
+  const [tabIndex, setTabIndex] = useState(0); // 0: Friends, 1: Find Users, 2: Friend Requests
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [friendList, setFriendList] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const currentTab = ["friends", "users", "requests"][tabIndex];
 
   useEffect(() => {
-    const fetch = async () => {
-      if (tab === "users" && search.trim()) {
+    const fetchFriends = async () => {
+      try {
+        const response = await getMyFriend();
+        setFriendList(response?.data || []);
+      } catch (error) {
+        console.error("Lỗi khi tải danh sách bạn bè:", error);
+        toast.error("Lỗi khi tải danh sách bạn bè.");
+      }
+    };
+
+    const fetchFriendRequests = async () => {
+      try {
+        const response = await getMyFriendRequest();
+        console.log("dd", response);
+        setFriendRequests(response?.data || []);
+      } catch (error) {
+        console.error("Lỗi khi tải yêu cầu kết bạn:", error);
+        toast.error("Lỗi khi tải yêu cầu kết bạn.");
+      }
+    };
+
+    fetchFriends();
+    fetchFriendRequests();
+  }, []);
+
+  useEffect(() => {
+    const fetchUsersByName = async () => {
+      if (currentTab === "users" && search.trim()) {
         try {
           const result = await getUserByName(search.trim());
           setSearchResults(result?.data || []);
         } catch (err) {
+          console.error("Lỗi khi tìm kiếm người dùng:", err);
           setSearchResults([]);
+          toast.error("Lỗi khi tìm kiếm người dùng.");
         }
       } else {
         setSearchResults([]);
       }
     };
-    fetch();
-  }, [search, tab]);
+    fetchUsersByName();
+  }, [search, currentTab]);
+
+  const handleTabChange = (event, newValue) => {
+    setTabIndex(newValue);
+    setSearch(""); // Reset search khi chuyển tab
+  };
 
   const handleFriendClick = (item) => {
-    if (tab === "friends") {
+    if (currentTab === "friends") {
       setSelectedFriend(item);
       setOpenDialog(true);
-    } else {
-      console.log("Gửi lời mời kết bạn tới:", item?.id);
+    }
+  };
+
+  const handleAddFriend = async (userId) => {
+    try {
+      await addFriend(userId);
+      toast.success("Đã gửi lời mời kết bạn.");
+      // Có thể cập nhật lại danh sách tìm kiếm để ẩn người đã gửi lời mời
+    } catch (error) {
+      console.error("Lỗi khi gửi lời mời kết bạn:", error);
+      toast.error("Không thể gửi lời mời kết bạn.");
+    }
+  };
+
+  const handleUnfriend = async (friendId) => {
+    try {
+      await unFriend(friendId);
+      toast.success("Đã hủy kết bạn.");
+      setFriendList(friendList.filter((friend) => friend._id !== friendId));
+      setOpenDialog(false);
+    } catch (error) {
+      console.error("Lỗi khi hủy kết bạn:", error);
+      toast.error("Không thể hủy kết bạn.");
+    }
+  };
+
+  const handleAcceptFriend = async (requestId) => {
+    console.log(requestId);
+    try {
+      await acceptFriend(requestId);
+      toast.success("Đã chấp nhận lời mời kết bạn.");
+      // Cập nhật lại danh sách bạn bè và yêu cầu kết bạn
+      const updatedRequests = friendRequests.filter(
+        (req) => req._id !== requestId
+      );
+      setFriendRequests(updatedRequests);
+      // Có thể cần gọi lại API getMyFriend để cập nhật danh sách bạn bè
+    } catch (error) {
+      console.error("Lỗi khi chấp nhận lời mời:", error);
+      toast.error("Không thể chấp nhận lời mời kết bạn.");
+    }
+  };
+
+  const handleRejectFriend = async (requestId) => {
+    try {
+      await rejectFriend(requestId);
+      toast.success("Đã từ chối lời mời kết bạn.");
+      setFriendRequests(friendRequests.filter((req) => req._id !== requestId));
+    } catch (error) {
+      console.error("Lỗi khi từ chối lời mời:", error);
+      toast.error("Không thể từ chối lời mời kết bạn.");
     }
   };
 
@@ -64,13 +153,26 @@ const FriendModel = () => {
     if (action === "chat") {
       toggleModel("chat");
     } else if (action === "remove") {
-      console.log("Xóa bạn:", selectedFriend?.id);
+      if (selectedFriend?._id) {
+        handleUnfriend(selectedFriend._id);
+      }
     }
     setOpenDialog(false);
   };
 
-  const activeList = tab === "friends" ? friends : searchResults;
-  const title = tab === "friends" ? "Danh sách bạn bè" : "Tìm người dùng";
+  const activeList =
+    currentTab === "friends"
+      ? friendList
+      : currentTab === "users"
+        ? searchResults
+        : friendRequests;
+
+  const title =
+    currentTab === "friends"
+      ? "Danh sách bạn bè"
+      : currentTab === "users"
+        ? "Tìm người dùng"
+        : "Yêu cầu kết bạn";
 
   return (
     <>
@@ -107,37 +209,30 @@ const FriendModel = () => {
             {title}
           </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Button
-              size="large"
-              variant="text"
-              onClick={() =>
-                setTab((prev) => (prev === "friends" ? "users" : "friends"))
-              }
-              sx={{
-                minWidth: 0,
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                textTransform: "none",
-                color: "#fff",
-                "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.3)" },
-              }}
-            >
-              {tab === "friends" ? <UserPlus size={16} /> : <Users size={16} />}
-              {tab === "friends" ? "Thêm" : "Bạn bè"}
-            </Button>
-            <IconButton
-              size="small"
-              className="text-white"
-              onClick={() => toggleModel("")}
-            >
-              <X size={20} />
-            </IconButton>
-          </Box>
+          <IconButton
+            size="small"
+            className="text-white"
+            onClick={() => toggleModel("")}
+          >
+            <X size={20} />
+          </IconButton>
         </Box>
 
+        {/* Tabs */}
+        <Tabs
+          value={tabIndex}
+          onChange={handleTabChange}
+          aria-label="friend tabs"
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab label="Bạn bè" icon={<Users size={16} />} />
+          <Tab label="Thêm bạn" icon={<UserPlus size={16} />} />
+          <Tab label="Yêu cầu" icon={<UserX2 size={16} />} />
+        </Tabs>
+
         {/* Search Input */}
-        {tab === "users" && (
+        {currentTab === "users" && (
           <Box px={2} py={1}>
             <TextField
               fullWidth
@@ -160,7 +255,7 @@ const FriendModel = () => {
         <Box sx={{ maxHeight: "60vh", overflowY: "auto", p: 1 }}>
           <AnimatePresence mode="wait">
             <motion.div
-              key={tab + search}
+              key={currentTab + search}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -173,14 +268,10 @@ const FriendModel = () => {
                       `${item?.firstName || ""} ${item?.lastName || ""}`.trim() ||
                       item.name;
                     return (
-                      <Button
-                        onClick={() => handleFriendClick(item)}
-                        key={item.id + fullName}
+                      <ListItem
+                        key={item._id + fullName}
                         sx={{
-                          width: "100%",
-                          justifyContent: "start",
-                          textAlign: "left",
-                          padding: 0,
+                          padding: "8px 12px",
                           borderRadius: "12px",
                           marginBottom: "8px",
                           backgroundColor: "#ffffff",
@@ -189,19 +280,33 @@ const FriendModel = () => {
                           },
                         }}
                       >
-                        <ListItem sx={{ padding: "8px 12px" }}>
-                          <ListItemAvatar>
-                            <Avatar alt={fullName} src={item.avatar || ""} />
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={fullName}
-                            primaryTypographyProps={{
-                              fontWeight: 500,
-                              fontSize: "16px",
-                              color: "#333",
+                        <ListItemAvatar>
+                          <Avatar alt={fullName} src={item.avatar || ""} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={fullName}
+                          primaryTypographyProps={{
+                            fontWeight: 500,
+                            fontSize: "16px",
+                            color: "#333",
+                          }}
+                        />
+                        {currentTab === "users" && (
+                          <Button
+                            variant="contained"
+                            size="small"
+                            sx={{
+                              ml: 1,
+                              textTransform: "none",
+                              borderRadius: "8px",
                             }}
-                          />
-                          {tab === "users" && (
+                            onClick={() => handleAddFriend(item._id)}
+                          >
+                            Kết bạn
+                          </Button>
+                        )}
+                        {currentTab === "requests" && (
+                          <Box>
                             <Button
                               variant="contained"
                               size="small"
@@ -210,16 +315,29 @@ const FriendModel = () => {
                                 textTransform: "none",
                                 borderRadius: "8px",
                               }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                console.log("Kết bạn với:", item.id);
-                              }}
+                              onClick={() => handleAcceptFriend(item._id)}
                             >
-                              Kết bạn
+                              Đồng ý
                             </Button>
-                          )}
-                        </ListItem>
-                      </Button>
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              color="error"
+                              sx={{
+                                ml: 1,
+                                textTransform: "none",
+                                borderRadius: "8px",
+                              }}
+                              onClick={() => handleRejectFriend(item._id)}
+                            >
+                              Từ chối
+                            </Button>
+                          </Box>
+                        )}
+                        {currentTab === "friends" && (
+                          <Button onClick={() => handleFriendClick(item)} />
+                        )}
+                      </ListItem>
                     );
                   })}
                 </List>
@@ -229,9 +347,11 @@ const FriendModel = () => {
                   color="textSecondary"
                   className="text-center py-4"
                 >
-                  {tab === "friends"
+                  {currentTab === "friends"
                     ? "Chưa có bạn bè nào."
-                    : "Không tìm thấy người dùng nào."}
+                    : currentTab === "users"
+                      ? "Không tìm thấy người dùng nào."
+                      : "Không có yêu cầu kết bạn mới."}
                 </Typography>
               )}
             </motion.div>
