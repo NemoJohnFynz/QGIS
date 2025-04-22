@@ -1,0 +1,42 @@
+Icon | Tên | Mô tả
+🔍 | Search | Tìm kiếm
+➕ | Plus, Add | Thêm mới
+✏️ | Edit, Pencil | Chỉnh sửa
+🗑️ | Delete, Trash | Xoá
+📤 | Upload | Tải lên
+📥 | Download, Inbox | Tải xuống
+📄 | Document, File | Tài liệu
+⚙️ | Settings, Gear | Cài đặt
+🔄 | Refresh, Sync | Làm mới hoặc đồng bộ
+📍 | Location, MapPin | Địa điểm
+🚩 | Flag | Cờ, đánh dấu
+🧭 | Compass, Navigate | Điều hướng
+👈 Icon | Tên | Mô tả
+👤 | User | Người dùng
+👥 | Users | Danh sách người
+🏠 | Home | Trang chủ
+🔐 | Lock, Security | Bảo mật, đăng nhập
+🔓 | Unlock, Logout | Đăng xuất
+🆔 | ID, BadgeCheck | Xác minh danh tính
+Icon | Tên | Mô tả
+💬 | Message, ChatBubble | Tin nhắn
+📨 | Send, PaperPlane | Gửi
+❤️ | Heart, Like | Thích
+⭐ | Star, Rate | Đánh giá
+🔔 | Notification, Bell | Thông báo
+📣 | Announcement, Megaphone | Thông báo, giới thiệu
+Icon | Tên | Mô tả
+📊 | BarChart, Analytics | Biểu đồ
+📈 | TrendingUp | Tăng trưởng
+📉 | TrendingDown | Giảm sút
+📦 | Package, Inventory | Quản lý hàng
+🛒 | ShoppingCart | Giỏ hàng
+💼 | Briefcase, Business | Công việc, nghiệp vụ
+Icon | Tên | Mô tả
+🖥️ | Computer, Terminal | Thiết bị, dòng lệnh
+🌐 | Globe, Internet | Toàn cầu
+🧩 | Puzzle, Integration | Tích hợp
+🔌 | Plug, Connection | Kết nối
+🧪 | Flask, Experiment | Thử nghiệm
+🗂️ | Folder, Collection | Thư mục
+📁 | FileFolder | Thư mục tài liệu

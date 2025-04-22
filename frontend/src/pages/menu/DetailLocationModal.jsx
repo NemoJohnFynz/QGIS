@@ -16,7 +16,7 @@ const DetailLocationModal = () => {
       if (!idStore) return;
       try {
         const res = await getLocationById(idStore);
-        setChaneLocation(res.data); // 👈 dùng context setter
+        setChaneLocation(res.data); //  dùng context setter
       } catch (err) {
         console.error("Failed to fetch store info", err);
       }
