@@ -2,19 +2,18 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import authToken from "../storage/authToken";
-
-// Backend socket URL
-const SOCKET_URL = "http://localhost:3001"; // hoặc IP server nếu deploy
+const SOCKET_URL = "ws://localhost:3001";
 
 const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
+  const [isNewMess, setIsNewMess] = useState(false);
   const token = authToken.getToken();
 
   useEffect(() => {
     const newSocket = io(SOCKET_URL, {
-      transports: ["websocket"],
+      // transports: ["websocket"],
       withCredentials: true,
       extraHeaders: {
         Authorization: `Bearer ${token}`,
@@ -27,21 +26,32 @@ export const SocketProvider = ({ children }) => {
   }, [token]);
   useEffect(() => {
     if (!socket) return;
-    socket.emit("locationUpdate", { lat: 21.0278, lng: 105.8342 }); 
+
+    // Thông báo khi kết nối thành công
+    socket.on("connect", () => {
+      console.log(" Socket kết nối thành công:", socket.id);
+    });
+
+    socket.emit("locationUpdate", { lat: 21.0278, lng: 105.8342 });
+
     socket.on("userLocationChanged", (data) => {
-      console.log("Đã nhận vị trí mới:", data);
-    }); 
-    socket.on("all_send", (data) => {
-      console.log("📩 Thông báo:", data);
+      console.log(" Đã nhận vị trí mới:", data);
+    });
+
+    socket.on("newmessage", (data) => {
+      setIsNewMess(!isNewMess);
+      console.log(" Thông báo:", data);
     });
 
     return () => {
+      socket.off("connect");
       socket.off("userLocationChanged");
-      socket.off("all_send");
+      socket.off("newmessage");
     };
   }, [socket]);
+
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket, isNewMess, setIsNewMess }}>
       {children}
     </SocketContext.Provider>
   );

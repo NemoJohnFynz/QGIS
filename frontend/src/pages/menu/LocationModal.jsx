@@ -18,7 +18,7 @@ const tabList = [
 ];
 
 const LocationModal = () => {
-  const { toggleModel, idStore } = useMenu();
+  const { toggleModel, idStore, locationShare, setLocationShare } = useMenu();
   const [activeTab, setActiveTab] = useState("overview");
   const [storeData, setStoreData] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -95,7 +95,7 @@ const LocationModal = () => {
     const reviewToSubmit = {
       user: userData?._id,
       location: storeData?._id,
-      rating: newReview.rating,
+      rating: parseInt(newReview.rating),
       comment: newReview.comment,
     };
 
@@ -268,19 +268,34 @@ const LocationModal = () => {
 
   return (
     <div className="fixed top-1/2 left-0 transform -translate-y-1/2 bg-white shadow-xl rounded-2xl w-full sm:w-80 max-w-xs sm:max-w-sm md:w-96 lg:w-96 max-h-[70vh] h-auto z-40 flex flex-col">
-      <button
-        className="flex items-center justify-center space-x-2 text-blue-600 hover:text-blue-800 text-left font-medium py-1 px-2 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
-        onClick={() => {
-          setRouteTarget([
-            storeData?.location?.coordinates[1],
-            storeData?.location?.coordinates[0],
-          ]);
-          toggleModel("");
-        }}
-      >
-        <Directions /> {/* MUI Icon for directions */}
-        <span>Chỉ đường đến đây</span>
-      </button>
+      <div className="flex flex-row w-full justify-between px-4 py-2">
+        {" "}
+        <button
+          className="flex items-center justify-center space-x-2 text-blue-600 hover:text-blue-800 text-left font-medium py-1 px-2 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
+          onClick={() => {
+            setRouteTarget([
+              storeData?.location?.coordinates[1],
+              storeData?.location?.coordinates[0],
+            ]);
+            toggleModel("");
+          }}
+        >
+          <Directions /> {/* MUI Icon for directions */}
+          <span>Chỉ đường đến đây</span>
+        </button>
+        <button
+          onClick={() => {
+            setLocationShare([
+              storeData?.location?.coordinates[1],
+              storeData?.location?.coordinates[0],
+            ]);
+            toggleModel("friend");
+          }}
+          className="bg-blue-400 rounded-md p-1"
+        >
+          Share
+        </button>
+      </div>
       <div className="flex items-center justify-between p-4 pt-0 border-b">
         <h2 className="text-lg font-bold">Thông tin vị trí</h2>
         <div className="flex items-center gap-2">

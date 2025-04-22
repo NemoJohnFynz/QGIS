@@ -88,9 +88,7 @@ import {
       }
     }
     
-    getServer(): Server {
-        return this.server;
-    }
+
 
     @SubscribeMessage('locationUpdate')
     async handleLocationUpdate(client: Socket, payload: { lat: number; lng: number }) {
@@ -123,5 +121,9 @@ import {
       }
       console.log(`📤 Gửi thông báo đến: ${id.join(', ')}`);
     }
+
+    getServer(): Server {
+      return this.server;
+  }
     
 }
