@@ -243,12 +243,20 @@ export class LocationService {
       if (!location) {
         throw new NotFoundException('Location not found');
       }
-      const reviews = await this.reviewModel.find({ location: locationId }).exec();
+    
+      const reviews = await this.reviewModel.find({ location: locationId })
+        .populate({
+          path: 'user',
+          select: 'firstName lastName avatar',
+        })
+        .exec();
+    
       if (!reviews || reviews.length === 0) {
         throw new NotFoundException('No reviews found for this location');
       }
+    
       return reviews;
     }
-
+    
     
 }

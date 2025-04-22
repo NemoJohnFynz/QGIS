@@ -66,12 +66,6 @@ import {
     @IsArray()
     images?: string[];
   
-    @ApiProperty({ example: { type: 'Point', coordinates: [105.85, 21.02] } })
-    @IsObject()
-    location: {
-      type: string;
-      coordinates: number[];
-    };
   
     @ApiProperty({ type: [String], required: false })
     @IsOptional()

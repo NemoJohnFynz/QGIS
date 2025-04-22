@@ -312,12 +312,24 @@ export class AuthService {
     
     
       async getMyFriendRequest(userId: Types.ObjectId): Promise<FriendRequest[]> {
-        return this.FriendRequestModel.find({ receiver: userId });
+        return this.FriendRequestModel.find({ receiver: userId })
+          .populate({
+            path: 'sender',
+            select: 'firstName lastName avatar',
+          })
+          .exec();
       }
+      
 
       async getMySentFriendRequest(userId: Types.ObjectId): Promise<FriendRequest[]> {
-        return this.FriendRequestModel.find({ sender: userId });
+        return this.FriendRequestModel.find({ sender: userId })
+          .populate({
+            path: 'receiver',
+            select: 'firstName lastName avatar',
+          })
+          .exec();
       }
+      
 
       async getMyFriend(userId: Types.ObjectId): Promise<Friend[]> {
 
@@ -556,13 +568,5 @@ export class AuthService {
           throw new HttpException('Could not retrieve users by phone number', HttpStatus.INTERNAL_SERVER_ERROR);
         }
       }
-
-
-
-
-    
-      
-
-    
 
 }
