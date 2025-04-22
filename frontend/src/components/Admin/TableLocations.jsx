@@ -47,7 +47,7 @@ export default function TableLocations({ query }) {
             <Loading />
         )
     }
-    console.log("locations", locations)
+
 
     const filteredLocation = query.trim() === "" ? locations : locations.filter(location => {
         const searchQuery = query.trim().toLowerCase();
@@ -73,7 +73,7 @@ export default function TableLocations({ query }) {
                 </tr>
             ) : (
                 filteredLocation.map((l, index) => (
-                    <tr key={l._id} className="hover:bg-gray-700">
+                    <tr key={l._id} className="">
                         <td className='px-4 py-2'>{index + 1}</td>
                         <td className="px-4 py-2">
 
@@ -99,7 +99,7 @@ export default function TableLocations({ query }) {
                             <Link className='text-blue-500 underline text-nowrap'>{l.contact.website}</Link>
                         </td>
                         <td>
-                            <button onClick={(e) => handleDeleteLocation(l._id)} className="text-red-500 px-4 py-2">Delete</button>
+                            <button onClick={(e) => handleDeleteLocation(l._id)} className="text-red-500 px-4 py-2 hover:underline">Delete</button>
                         </td>
                     </tr>
                 ))

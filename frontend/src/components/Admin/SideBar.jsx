@@ -20,11 +20,18 @@ export default function SideBar() {
                     <span className="px-10">Dashboard</span>
                 </Link>
                 <Link
-                    to={"/users"}
+                    to={"users"}
                     className={` p-4 flex items-center rounded-md ${isActiveTab("/") ? "bg-[#1D1D1D]" : "hover:bg-[#353535]"}`}
                 >
                     <Person />
                     <span className="px-10">Users</span>
+                </Link>
+                <Link
+                    to={"categories"}
+                    className={` p-4 flex items-center rounded-md ${isActiveTab("/") ? "bg-[#1D1D1D]" : "hover:bg-[#353535]"}`}
+                >
+                    <LocationOn />
+                    <span className="px-10">Categories</span>
                 </Link>
                 <Link
                     to={"locations"}
